@@ -1,0 +1,705 @@
+/* Client portal + admin schedule UI (scoped) */
+.portal-shell {
+  --portal-ink: #0a0a0a;
+  --portal-muted: #5c5c5c;
+  --portal-line: rgb(0 0 0 / 0.1);
+  --portal-green: var(--myklen-teal);
+  --portal-accent: var(--hero-accent);
+  --portal-paper: #fafafa;
+}
+
+.portal-shell .page {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 3rem 1.25rem 5rem;
+}
+
+.portal-shell .page-narrow {
+  max-width: 560px;
+}
+
+.portal-shell .eyebrow {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--portal-muted);
+}
+
+.portal-shell .display-title {
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1.1;
+}
+
+.portal-shell .lead {
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  color: rgb(10 10 10 / 0.78);
+}
+
+.portal-shell .btn-primary {
+  display: inline-block;
+  padding: 0.75rem 1.75rem;
+  background: var(--portal-accent);
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 9999px;
+  cursor: pointer;
+}
+
+.portal-shell .btn-primary:hover {
+  background: #a81832;
+}
+
+.portal-shell .btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.portal-shell .btn-secondary {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--portal-line);
+  background: #fff;
+  font: inherit;
+  font-size: 0.8125rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+.portal-shell .form-field {
+  margin-bottom: 1.25rem;
+}
+
+.portal-shell .form-field label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+  color: var(--portal-muted);
+}
+
+.portal-shell .form-field input,
+.portal-shell .form-field select,
+.portal-shell .form-field textarea {
+  width: 100%;
+  padding: 0.75rem 0.875rem;
+  border: 1px solid var(--portal-line);
+  border-radius: 0.5rem;
+  background: #fff;
+  font-family: var(--font-body, system-ui, sans-serif);
+  font-size: 1rem;
+  line-height: 1.4;
+  color: var(--portal-ink);
+  caret-color: var(--portal-ink);
+  direction: ltr;
+  unicode-bidi: isolate;
+  text-align: left;
+}
+
+.portal-shell .form-field input::placeholder,
+.portal-shell .form-field textarea::placeholder {
+  color: rgb(10 10 10 / 0.42);
+}
+
+/* Admin dark shell: forms must not inherit light page text */
+.portal-shell.bg-slate-950 .admin-form-panel,
+.portal-shell.bg-slate-950 .schedule-page__panel {
+  background: #fff;
+  color: var(--portal-ink);
+  border: 1px solid rgb(255 255 255 / 0.12);
+  border-radius: 1rem;
+  padding: 1.5rem;
+}
+
+.portal-shell.bg-slate-950 .admin-form-panel h2,
+.portal-shell.bg-slate-950 .admin-form-panel label {
+  color: var(--portal-ink);
+}
+
+.portal-shell.bg-slate-950 .admin-form-panel .form-field label {
+  color: var(--portal-muted);
+}
+
+.portal-shell.bg-slate-950 .admin-data-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  color: var(--portal-ink);
+  border-radius: 1rem;
+  overflow: hidden;
+  border: 1px solid rgb(255 255 255 / 0.12);
+}
+
+.portal-shell.bg-slate-950 .admin-data-table th,
+.portal-shell.bg-slate-950 .admin-data-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--portal-line);
+  text-align: left;
+}
+
+.portal-shell.bg-slate-950 .admin-data-table th {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--portal-muted);
+  background: var(--portal-paper);
+}
+
+.portal-shell .account-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.portal-shell .account-card {
+  padding: 1.125rem 1.25rem;
+  border: 1px solid var(--portal-line);
+  border-radius: 1rem;
+  background: var(--portal-paper);
+}
+
+.portal-shell .account-card__head {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.portal-shell .account-card__meta {
+  font-size: 0.875rem;
+  color: var(--portal-muted);
+}
+
+.portal-shell .account-badge {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.625rem;
+  border: 1px solid var(--portal-line);
+  border-radius: 9999px;
+}
+
+.portal-shell .account-badge--scheduled {
+  border-color: var(--portal-green);
+  color: var(--portal-green);
+}
+
+.portal-shell .account-badge--cancelled {
+  border-color: #9ca3af;
+  color: #6b7280;
+  background: rgb(107 114 128 / 0.08);
+}
+
+.portal-shell .account-badge--completed {
+  border-color: var(--portal-muted);
+  color: var(--portal-muted);
+}
+
+.portal-shell .schedule-page__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1.75rem;
+  flex-wrap: wrap;
+}
+
+.portal-shell .schedule-page__panel,
+.portal-shell .account-detail {
+  margin-top: 1.75rem;
+  padding: 1.5rem;
+  border: 1px solid var(--portal-line);
+  border-radius: 1rem;
+  background: var(--portal-paper);
+}
+
+.portal-shell .account-calendar-hint {
+  margin-top: 0.75rem;
+  font-size: 0.8125rem;
+  color: var(--portal-muted);
+}
+
+.portal-shell .customer-calendar-section {
+  overflow: visible;
+}
+
+/* Admin uses dark shell — calendar must not inherit light text */
+.portal-shell.bg-slate-950 .admin-schedule-surface,
+.portal-shell.bg-slate-950 .schedule-calendar {
+  color: var(--portal-ink);
+}
+
+.portal-shell .schedule-calendar__scroll {
+  border: 1px solid var(--portal-line);
+  border-radius: 1rem;
+  background: #fff;
+  padding: 1rem;
+  overflow-x: auto;
+  color: var(--portal-ink);
+}
+
+.portal-shell .admin-schedule-surface {
+  margin-top: 1rem;
+  border-radius: 1rem;
+  border: 1px solid rgb(255 255 255 / 0.12);
+  background: #fff;
+  color: var(--portal-ink);
+  padding: 1rem;
+}
+
+.portal-shell .schedule-calendar__date {
+  display: block;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--portal-ink);
+  margin-bottom: 0.25rem;
+}
+
+.portal-shell .schedule-calendar__events {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+  min-height: 0;
+}
+
+.portal-shell .schedule-calendar__cell--outside {
+  background: #f5f5f4;
+}
+
+.portal-shell .schedule-calendar__cell--outside .schedule-calendar__date {
+  color: var(--portal-muted);
+}
+
+.portal-shell .schedule-calendar__month {
+  color: var(--portal-ink);
+}
+
+.portal-shell .schedule-calendar__event,
+.portal-shell .schedule-calendar__event-time,
+.portal-shell .schedule-calendar__event-label,
+.portal-shell .schedule-calendar__event-sub {
+  color: var(--portal-ink);
+}
+
+.portal-shell .schedule-calendar__hint {
+  margin-top: 0.75rem;
+  font-size: 0.8125rem;
+  color: var(--portal-muted);
+}
+
+.portal-shell .schedule-calendar__hint--warn {
+  color: var(--hero-accent, #c41e3a);
+  font-weight: 600;
+}
+
+.portal-shell .schedule-calendar__toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.portal-shell .schedule-calendar__month {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  min-width: 12rem;
+  text-align: center;
+}
+
+.portal-shell .schedule-calendar__weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.portal-shell .schedule-calendar__weekday {
+  text-align: center;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--portal-muted);
+}
+
+.portal-shell .schedule-calendar__grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 4px;
+  min-width: min(100%, 720px);
+}
+
+.portal-shell .schedule-calendar__cell {
+  min-height: 5.5rem;
+  border: 1px solid var(--portal-line);
+  padding: 0.375rem;
+  background: #fff;
+}
+
+/* Customer calendar — enlarge the hovered date's row (horizontal band) + column (vertical band) */
+.portal-shell .schedule-calendar--client .schedule-calendar__scroll {
+  overflow: visible;
+  padding: 0.75rem 0.5rem;
+}
+
+.portal-shell .schedule-calendar--client .schedule-calendar__body {
+  position: relative;
+  overflow: visible;
+}
+
+.portal-shell .schedule-calendar--client .schedule-calendar__grid {
+  position: relative;
+  overflow: visible;
+}
+
+.portal-shell .schedule-calendar--client .schedule-calendar__weekday {
+  transition: transform 0.2s ease, font-weight 0.2s ease;
+}
+
+.portal-shell .schedule-calendar--client .schedule-calendar__cell {
+  position: relative;
+  z-index: 0;
+  overflow: visible;
+  transition:
+    min-height 0.2s ease,
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+@media (hover: hover) {
+  /* Vertical band — whole column wider */
+  .portal-shell .schedule-calendar--client .schedule-calendar__weekday--hover-col,
+  .portal-shell .schedule-calendar--client .schedule-calendar__cell--hover-col {
+    z-index: 4;
+    transform: scaleX(1.14);
+    transform-origin: center center;
+  }
+
+  /* Horizontal band — whole row taller */
+  .portal-shell .schedule-calendar--client .schedule-calendar__cell--hover-row {
+    z-index: 4;
+    min-height: 7.25rem;
+  }
+
+  .portal-shell .schedule-calendar--client .schedule-calendar__cell--hover-row.schedule-calendar__cell--hover-col {
+    z-index: 10;
+    min-height: 7.25rem;
+    transform: scaleX(1.14);
+  }
+
+  .portal-shell .schedule-calendar--client .schedule-calendar__cell--hover-cross {
+    border-color: var(--portal-green);
+    background: #fff;
+    box-shadow:
+      inset 0 0 0 1px rgb(13 92 92 / 0.28),
+      0 6px 16px rgb(0 0 0 / 0.1);
+  }
+
+  .portal-shell .schedule-calendar--client .schedule-calendar__weekday--hover-col {
+    font-weight: 700;
+    color: var(--portal-green);
+  }
+
+  .portal-shell .schedule-calendar--client .schedule-calendar__cell--hover-row .schedule-calendar__event-label,
+  .portal-shell .schedule-calendar--client .schedule-calendar__cell--hover-col .schedule-calendar__event-label {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: unset;
+    word-break: break-word;
+  }
+
+  .portal-shell .schedule-calendar--client .schedule-calendar__cell--hover-row .schedule-calendar__events,
+  .portal-shell .schedule-calendar--client .schedule-calendar__cell--hover-col .schedule-calendar__events {
+    overflow: visible;
+  }
+}
+
+.portal-shell .schedule-calendar__cell--today {
+  border-color: var(--portal-accent);
+}
+
+.portal-shell .schedule-calendar__cell--clickable {
+  cursor: pointer;
+}
+
+.portal-shell .schedule-calendar__event {
+  width: 100%;
+  text-align: left;
+  border: none;
+  border-radius: 0.25rem;
+  padding: 0.25rem 0.375rem;
+  font: inherit;
+  font-size: 0.6875rem;
+  cursor: pointer;
+  background: rgb(13 92 92 / 0.1);
+  border-left: 3px solid var(--portal-green);
+}
+
+.portal-shell .schedule-calendar__event--selected {
+  outline: 2px solid var(--portal-accent);
+}
+
+.portal-shell .schedule-calendar__event {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 1.375rem;
+}
+
+.portal-shell .schedule-calendar__event-label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 600;
+}
+
+.portal-shell .schedule-calendar__event-sub {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.625rem;
+  opacity: 0.75;
+  line-height: 1.2;
+}
+
+.portal-shell .schedule-calendar__event {
+  flex-wrap: wrap;
+}
+
+.portal-shell .schedule-calendar__event--cancelled {
+  background: rgb(107 114 128 / 0.12) !important;
+  border-left-color: #9ca3af !important;
+}
+
+.portal-shell .schedule-calendar__event--cancelled .schedule-calendar__event-label {
+  color: #6b7280;
+  text-decoration: line-through;
+}
+
+.portal-shell .schedule-calendar__event--completed {
+  background: rgb(13 92 92 / 0.06) !important;
+  border-left-color: rgb(13 92 92 / 0.35) !important;
+}
+
+.portal-shell .schedule-calendar__event--completed .schedule-calendar__event-label {
+  color: var(--portal-muted);
+}
+
+/* ! = unread visit note only (not “has a visit”) */
+.portal-shell .schedule-calendar__event--alert {
+  border-left-color: var(--hero-accent, #c41e3a);
+  background: rgb(196 30 58 / 0.08);
+}
+
+.portal-shell .schedule-calendar__event--cancelled.schedule-calendar__event--alert,
+.portal-shell .schedule-calendar__event--completed.schedule-calendar__event--alert {
+  border-left-color: var(--hero-accent, #c41e3a);
+}
+
+.portal-shell .schedule-calendar__alert {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.125rem;
+  height: 1.125rem;
+  border-radius: 9999px;
+  background: var(--hero-accent, #c41e3a);
+  color: #fff;
+  font-size: 0.6875rem;
+  font-weight: 800;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.portal-shell .schedule-calendar__cell--alert .schedule-calendar__date::after {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-left: 4px;
+  border-radius: 50%;
+  background: var(--hero-accent, #c41e3a);
+  vertical-align: middle;
+}
+
+.portal-shell .visit-notes-panel__title {
+  margin: 0 0 0.25rem;
+  font-size: 1.125rem;
+  font-weight: 700;
+}
+
+.portal-shell .visit-notes-panel__meta {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--portal-muted);
+}
+
+.portal-shell .visit-notes-panel__head {
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--portal-line);
+}
+
+.portal-shell .visit-notes-panel__head-row,
+.admin-panel .visit-notes-panel__head-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.portal-shell .visit-notes-panel__edit-link,
+.admin-panel .visit-notes-panel__edit-link {
+  border: none;
+  background: none;
+  padding: 0;
+  font-size: 0.8125rem;
+  color: var(--portal-muted);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.admin-panel .visit-notes-panel__edit-link {
+  color: var(--admin-muted);
+}
+
+.admin-panel .admin-schedule-detail {
+  margin-top: 1rem;
+}
+
+.admin-panel .admin-schedule-detail__hint {
+  margin: 1rem 0 0;
+  font-size: 0.875rem;
+  color: var(--admin-muted);
+}
+
+.admin-panel .admin-schedule-detail > * + * {
+  margin-top: 0;
+}
+
+.portal-shell .visit-thread,
+.admin-panel .visit-thread {
+  list-style: none;
+  margin: 0 0 1rem;
+  padding: 0;
+}
+
+.portal-shell .visit-thread__empty,
+.admin-panel .visit-thread__empty {
+  font-size: 0.875rem;
+  color: var(--portal-muted);
+  padding: 0.25rem 0;
+}
+
+.portal-shell .visit-thread__item,
+.admin-panel .visit-thread__item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--portal-line);
+}
+
+.admin-panel .visit-thread__item {
+  border-bottom-color: var(--admin-line);
+}
+
+.portal-shell .visit-thread__item--reply,
+.admin-panel .visit-thread__item--reply {
+  margin-left: 1.25rem;
+  padding-left: 0.75rem;
+  border-left: 2px solid var(--portal-line);
+}
+
+.admin-panel .visit-thread__item--reply {
+  border-left-color: var(--admin-line);
+}
+
+.portal-shell .visit-thread__text,
+.admin-panel .visit-thread__text {
+  flex: 1;
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+.portal-shell .visit-thread__del,
+.admin-panel .visit-thread__del {
+  flex-shrink: 0;
+  border: none;
+  background: none;
+  padding: 0;
+  font-size: 0.75rem;
+  color: #b91c1c;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.portal-shell .visit-thread__del:disabled,
+.admin-panel .visit-thread__del:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.portal-shell .visit-thread__compose,
+.admin-panel .visit-thread__compose {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.portal-shell .visit-thread__input,
+.admin-panel .visit-thread__input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--portal-line);
+  border-radius: 0.5rem;
+  font-family: var(--font-body, system-ui, sans-serif);
+  font-size: 1rem;
+  line-height: 1.4;
+  color: var(--portal-ink);
+  resize: vertical;
+  direction: ltr;
+}
+
+.admin-panel .visit-thread__input {
+  border-color: var(--admin-line);
+  color: var(--admin-ink);
+}
+
+.portal-shell .visit-thread__error,
+.admin-panel .visit-thread__error {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: #b91c1c;
+}
+
+.portal-shell .appointment-form__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}

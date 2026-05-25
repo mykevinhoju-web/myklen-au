@@ -1,0 +1,53 @@
+[
+  {
+    "id": "pkg-starter",
+    "slug": "starter",
+    "name": "Starter",
+    "tier": "starter",
+    "priceAud": 990,
+    "description": "Launch with core training, booking path, and review tools — ideal for your first local clients.",
+    "highlights": [
+      "Online cleaning & business training",
+      "Booking system access (phased)",
+      "Reviews & feedback setup",
+      "Business card & flyer templates",
+      "Starter supply list"
+    ],
+    "featured": false,
+    "active": true
+  },
+  {
+    "id": "pkg-growth",
+    "slug": "growth",
+    "name": "Growth",
+    "tier": "growth",
+    "priceAud": 2490,
+    "description": "Professional branding plus customer-win training — look established and grow faster.",
+    "highlights": [
+      "Everything in Starter",
+      "Print-ready catalogue & pamphlet artwork",
+      "Branded uniform guidance",
+      "Local customer acquisition training",
+      "Subdomain booking (yourname.myklen.com.au)"
+    ],
+    "featured": true,
+    "active": true
+  },
+  {
+    "id": "pkg-premium",
+    "slug": "premium",
+    "name": "Premium",
+    "tier": "premium",
+    "priceAud": 4990,
+    "description": "Full launch partner — advanced training, 1:1 onboarding, marketing support, and custom domain option.",
+    "highlights": [
+      "Everything in Growth",
+      "1:1 onboarding session",
+      "Priority support & marketing kit",
+      "Custom domain for your portal (Phase 3)",
+      "Early CRM & scheduling access"
+    ],
+    "featured": false,
+    "active": true
+  }
+]

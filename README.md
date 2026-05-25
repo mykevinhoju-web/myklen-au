@@ -1,0 +1,50 @@
+# myklen.com.au
+
+Platform for Australians who want to **start and run a cleaning business** — training, packages, branding, supplies, and (later) manager & customer portals.
+
+**Separate project from [kshop-au](../kshop-au).**
+
+## Run locally
+
+```bash
+cd myklen-au
+npm install
+npm run dev
+```
+
+**Port 3001** by default so **kshop can use 3000** at the same time.
+
+- Marketing site: http://localhost:3001  
+- Packages: http://localhost:3001/packages  
+- Admin: http://localhost:3001/admin/login (default `admin` / `changeme` via `.env.local`)  
+- Manager landing: http://localhost:3001/manager  
+- Example customer portal: http://localhost:3001/m/demo  
+
+Both running together:
+
+| Project | Command | URL |
+|---------|---------|-----|
+| kshop-au | `npm run dev` | http://localhost:3000 |
+| myklen-au | `npm run dev` | http://localhost:3001 |
+
+## Stripe (package sales — Phase 1)
+
+1. Copy `.env.local.example` → `.env.local`  
+2. Set `STRIPE_SECRET_KEY` and `NEXT_PUBLIC_SITE_URL`  
+3. Buy flow: package detail → **Buy with Stripe**
+
+## Architecture
+
+See [ARCHITECTURE.md](./ARCHITECTURE.md) for roles (admin / manager / customer), tenant URLs, and phased roadmap.
+
+## Phases
+
+| Phase | Focus |
+|-------|--------|
+| **1** | Marketing, packages, Stripe, admin |
+| **2** | Manager login, dashboard, slug & subdomain links |
+| **3** | Customer login, booking, feedback, custom domains |
+
+## Open in Cursor
+
+Open the **`myklen-au`** folder as its own workspace (not kshop-au).

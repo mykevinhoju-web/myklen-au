@@ -1,0 +1,18 @@
+[
+  {
+    "id": "msg-1779697637067",
+    "userId": "user-1779696805382",
+    "subject": "test",
+    "body": "aacea",
+    "createdAt": "2026-05-25T08:27:17.067Z",
+    "readByAdmin": true
+  },
+  {
+    "id": "msg-1779697659050",
+    "userId": "user-1779696805382",
+    "subject": "aacea",
+    "body": "acawef",
+    "createdAt": "2026-05-25T08:27:39.050Z",
+    "readByAdmin": true
+  }
+]

@@ -1,0 +1,18 @@
+[
+  {
+    "id": "user-1779696805382",
+    "username": "kerry",
+    "passwordHash": "$2b$10$pf1rqLhLUazOluSmZqbMr.CD3Uu7XJHGnnAwRahvwis3f9bC/dlEG",
+    "displayName": "Kerry",
+    "active": true,
+    "createdAt": "2026-05-25T08:13:25.478Z"
+  },
+  {
+    "id": "user-1779707853572",
+    "username": "john",
+    "passwordHash": "$2b$10$L6tvtJV0U19tAG9NoWG0c.LrXhFO1GQd2nTchUnEVyNtWI52WZlCi",
+    "displayName": "John",
+    "active": true,
+    "createdAt": "2026-05-25T11:17:33.662Z"
+  }
+]

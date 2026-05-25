@@ -1,0 +1,426 @@
+/* Platform admin — dark chrome, light form surfaces (imported from admin layout only) */
+
+.admin-panel {
+  --admin-ink: #0a0a0a;
+  --admin-muted: #5c5c5c;
+  --admin-line: rgb(0 0 0 / 0.1);
+  --admin-surface: #ffffff;
+  --admin-paper: #fafafa;
+}
+
+.admin-panel .admin-page-title {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: -0.02em;
+}
+
+.admin-panel .admin-page-lead {
+  margin: 0.5rem 0 0;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: rgb(148 163 184);
+}
+
+.admin-panel .admin-page-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.75rem;
+}
+
+.admin-panel .admin-surface {
+  background: var(--admin-surface);
+  color: var(--admin-ink);
+  border: 1px solid rgb(255 255 255 / 0.12);
+  border-radius: 1rem;
+  padding: 1.5rem;
+}
+
+.admin-panel .admin-surface .admin-surface__title {
+  margin: 0 0 1rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--admin-ink);
+}
+
+.admin-panel .form-field {
+  margin-bottom: 1.25rem;
+}
+
+.admin-panel .form-field label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--admin-muted);
+}
+
+.admin-panel .form-field input,
+.admin-panel .form-field select,
+.admin-panel .form-field textarea {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 0.75rem 0.875rem;
+  border: 1px solid var(--admin-line);
+  border-radius: 0.5rem;
+  background: #fff;
+  font-family: var(--font-body, system-ui, sans-serif);
+  font-size: 1rem;
+  line-height: 1.4;
+  color: var(--admin-ink);
+  caret-color: var(--admin-ink);
+  -webkit-text-fill-color: var(--admin-ink);
+  direction: ltr;
+  unicode-bidi: isolate;
+  text-align: left;
+}
+
+.admin-panel .form-field input::placeholder,
+.admin-panel .form-field textarea::placeholder {
+  color: rgb(10 10 10 / 0.4);
+}
+
+.admin-panel .form-field select option {
+  color: var(--admin-ink);
+  background: #fff;
+}
+
+.admin-panel .form-field input:-webkit-autofill,
+.admin-panel .form-field input:-webkit-autofill:hover,
+.admin-panel .form-field input:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--admin-ink);
+  box-shadow: 0 0 0 1000px #fff inset;
+}
+
+.admin-panel .admin-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
+  color: var(--admin-ink);
+  cursor: pointer;
+}
+
+.admin-panel .admin-checkbox input {
+  width: 1rem;
+  height: 1rem;
+  accent-color: var(--hero-accent, #c41e3a);
+}
+
+.admin-panel .btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.625rem 1.25rem;
+  border: none;
+  border-radius: 9999px;
+  background: var(--hero-accent, #c41e3a);
+  color: #fff;
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.admin-panel .btn-primary:hover {
+  background: #a81832;
+}
+
+.admin-panel .btn-primary:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.admin-panel .btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  border: 1px solid rgb(255 255 255 / 0.22);
+  border-radius: 0.5rem;
+  background: rgb(255 255 255 / 0.06);
+  color: #fff;
+  font: inherit;
+  font-size: 0.8125rem;
+  cursor: pointer;
+}
+
+.admin-panel .btn-secondary:hover {
+  background: rgb(255 255 255 / 0.12);
+}
+
+.admin-panel .admin-surface .btn-secondary {
+  border-color: var(--admin-line);
+  background: #fff;
+  color: var(--admin-ink);
+}
+
+.admin-panel .admin-surface .btn-secondary:hover {
+  background: var(--admin-paper);
+}
+
+.admin-panel .admin-form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}
+
+.admin-panel .admin-feedback {
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+  color: rgb(148 163 184);
+}
+
+.admin-panel .admin-data-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--admin-surface);
+  color: var(--admin-ink);
+  border: 1px solid rgb(255 255 255 / 0.12);
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+.admin-panel .admin-data-table th,
+.admin-panel .admin-data-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--admin-line);
+  text-align: left;
+  vertical-align: middle;
+}
+
+.admin-panel .admin-data-table th {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--admin-muted);
+  background: var(--admin-paper);
+}
+
+.admin-panel .admin-data-table tr:last-child td {
+  border-bottom: none;
+}
+
+.admin-panel .admin-data-table .admin-table-actions {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.admin-panel .admin-dash-grid {
+  display: grid;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+@media (min-width: 640px) {
+  .admin-panel .admin-dash-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.admin-panel .admin-dash-card {
+  display: block;
+  padding: 1.25rem;
+  border: 1px solid rgb(255 255 255 / 0.1);
+  border-radius: 1rem;
+  background: rgb(255 255 255 / 0.05);
+  color: #fff;
+  text-decoration: none;
+  transition: background 0.15s ease;
+}
+
+.admin-panel .admin-dash-card:hover {
+  background: rgb(255 255 255 / 0.09);
+}
+
+.admin-panel .admin-dash-card__title {
+  font-weight: 600;
+}
+
+.admin-panel .admin-dash-card__desc {
+  margin-top: 0.35rem;
+  font-size: 0.8125rem;
+  color: rgb(148 163 184);
+}
+
+/* Schedule calendar inside admin */
+.admin-panel .admin-schedule-surface {
+  margin-top: 0.5rem;
+  padding: 1rem;
+  border-radius: 1rem;
+  border: 1px solid rgb(255 255 255 / 0.12);
+  background: #fff;
+  color: var(--admin-ink);
+}
+
+.admin-panel .schedule-calendar,
+.admin-panel .schedule-calendar__scroll {
+  color: var(--admin-ink);
+}
+
+.admin-panel .schedule-calendar__date,
+.admin-panel .schedule-calendar__month {
+  color: var(--admin-ink);
+}
+
+.admin-panel .schedule-calendar__weekday {
+  color: var(--admin-muted);
+}
+
+.admin-panel .schedule-calendar__cell {
+  background: #fff;
+}
+
+.admin-panel .schedule-calendar__cell--outside {
+  background: #f5f5f4;
+}
+
+.admin-panel .schedule-calendar__cell--outside .schedule-calendar__date {
+  color: var(--admin-muted);
+}
+
+.admin-panel .schedule-calendar__event,
+.admin-panel .schedule-calendar__event-label {
+  color: var(--admin-ink);
+}
+
+.admin-panel .schedule-calendar__events {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+}
+
+.admin-panel .schedule-calendar__event {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 1.375rem;
+}
+
+.admin-panel .schedule-calendar__event-label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 600;
+}
+
+.admin-panel .schedule-calendar__event-sub {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.625rem;
+  color: var(--admin-muted);
+  line-height: 1.2;
+}
+
+.admin-panel .schedule-calendar__event {
+  flex-wrap: wrap;
+}
+
+.admin-panel .schedule-calendar__event--cancelled {
+  background: rgb(107 114 128 / 0.14) !important;
+  border-left-color: #9ca3af !important;
+}
+
+.admin-panel .schedule-calendar__event--cancelled .schedule-calendar__event-label {
+  color: #6b7280;
+  text-decoration: line-through;
+}
+
+.admin-panel .schedule-calendar__event--completed {
+  background: rgb(13 92 92 / 0.08) !important;
+  border-left-color: rgb(13 92 92 / 0.35) !important;
+}
+
+.admin-panel .schedule-calendar__event--alert {
+  border-left-color: var(--hero-accent, #c41e3a);
+  background: rgb(196 30 58 / 0.12);
+}
+
+.admin-panel .schedule-calendar__alert {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.125rem;
+  height: 1.125rem;
+  border-radius: 9999px;
+  background: var(--hero-accent, #c41e3a);
+  color: #fff;
+  font-size: 0.6875rem;
+  font-weight: 800;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.admin-panel .schedule-calendar__cell--alert .schedule-calendar__date::after {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-left: 4px;
+  border-radius: 50%;
+  background: var(--hero-accent, #c41e3a);
+  vertical-align: middle;
+}
+
+.admin-panel .schedule-calendar__hint {
+  color: var(--admin-muted);
+}
+
+.admin-panel .schedule-calendar__hint--warn {
+  color: var(--hero-accent, #c41e3a);
+  font-weight: 600;
+}
+
+.admin-panel .admin-schedule-surface .btn-secondary {
+  background: #fff;
+  color: var(--admin-ink);
+  border-color: var(--admin-line);
+}
+
+.admin-panel .admin-schedule-surface .btn-secondary:hover {
+  background: var(--admin-paper);
+}
+
+.admin-panel .schedule-page__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.admin-panel .schedule-page__panel {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--admin-line);
+}
+
+.admin-panel .appointment-form__title {
+  margin: 0 0 1rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--admin-ink);
+}
+
+.admin-panel .appointment-form__delete {
+  color: #b91c1c;
+}

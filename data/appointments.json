@@ -1,0 +1,55 @@
+[
+  {
+    "id": "apt-1779696881397",
+    "userId": "user-1779696805382",
+    "title": "GN Cleaning",
+    "scheduledAt": "2026-05-24T23:00:00.000Z",
+    "status": "cancelled",
+    "location": "5 white cl, portland",
+    "notes": "ok i see",
+    "createdAt": "2026-05-25T08:14:41.397Z",
+    "clientNote": "i left text",
+    "clientNoteReadByAdmin": true,
+    "adminNoteReadByClient": true,
+    "visitThread": [
+      {
+        "id": "legacy-a-apt-1779696881397",
+        "author": "admin",
+        "body": "i left word",
+        "createdAt": "2026-05-25T08:14:41.397Z"
+      },
+      {
+        "id": "msg-1779707498435-1vplzm",
+        "author": "admin",
+        "body": "test",
+        "createdAt": "2026-05-25T11:11:38.435Z"
+      },
+      {
+        "id": "msg-1779707557448-9gesus",
+        "author": "client",
+        "body": "i left text",
+        "createdAt": "2026-05-25T11:12:37.448Z"
+      },
+      {
+        "id": "msg-1779707579751-345e79",
+        "author": "admin",
+        "body": "ok i see",
+        "createdAt": "2026-05-25T11:12:59.751Z"
+      }
+    ]
+  },
+  {
+    "id": "apt-1779697120461",
+    "userId": "user-1779696805382",
+    "title": "Cleaning visit",
+    "scheduledAt": "2026-05-18T23:00:00.000Z",
+    "status": "scheduled",
+    "location": "",
+    "notes": "",
+    "createdAt": "2026-05-25T08:18:40.461Z",
+    "clientNote": "",
+    "clientNoteReadByAdmin": true,
+    "adminNoteReadByClient": true,
+    "visitThread": []
+  }
+]
