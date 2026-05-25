@@ -179,14 +179,14 @@ function FloatingNavPill({
       <div className="flex h-[3.75rem] items-center gap-2.5 px-3.5 sm:h-16 sm:gap-3 sm:px-4 lg:px-5">
         <Link
           href="/"
-          className="flex min-w-0 shrink-0 items-center gap-0"
+          className="flex min-w-0 shrink-0 items-center gap-2 sm:gap-2.5"
           aria-label="myklen — home"
           onClick={closeAll}
         >
           <MascotLogo reveal={mascotReveal} className="!h-9 sm:!h-10" />
           <BrandLogo
             priority
-            className="-ml-1.5 !h-8 !max-w-[8.5rem] sm:-ml-2 sm:!h-9 sm:!max-w-[9.75rem]"
+            className="!h-5 !max-w-[5.5rem] sm:!h-6 sm:!max-w-[6.5rem]"
           />
         </Link>
 

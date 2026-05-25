@@ -27,6 +27,22 @@ Both running together:
 | kshop-au | `npm run dev` | http://localhost:3000 |
 | myklen-au | `npm run dev` | http://localhost:3001 |
 
+## Homepage hero video
+
+The hero uses `public/hero/hero-scene.mp4` (and `hero-scene-mobile.mp4`). The code is wired up; **the site only shows the video if these files are in Git and deployed**.
+
+If the live site shows a grey hero or a still image only, add and push the folder:
+
+```bash
+git add public/hero
+git commit -m "Add hero media for production"
+git push
+```
+
+See `public/hero/ASSETS.md` for the full file list (~18MB desktop MP4 is normal).
+
+Header wordmark: `public/brand/myklen-wordmark.png` — **must be committed** or production shows no image (`404` on myklen.com.au).
+
 ## Production data on Vercel (appointments, clients, messages)
 
 Local dev writes to `data/*.json`. On Vercel you need **Blob storage** or saves are lost.

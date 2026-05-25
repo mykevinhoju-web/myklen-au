@@ -6,6 +6,7 @@ import { getViewportHeight } from '@/lib/viewport-height'
 
 const VIDEO_DESKTOP = '/hero/hero-scene.mp4'
 const VIDEO_MOBILE = '/hero/hero-scene-mobile.mp4'
+const POSTER_SRC = '/hero/hero-poster.png'
 
 type Props = {
   children: ReactNode
@@ -47,7 +48,9 @@ export function HeroVideoScroll({ children }: Props) {
   const [progress, setProgress] = useState(0)
   const [reduceMotion, setReduceMotion] = useState(false)
   const [videoReady, setVideoReady] = useState(false)
+  const [videoFailed, setVideoFailed] = useState(false)
   const [videoSrc, setVideoSrc] = useState(VIDEO_DESKTOP)
+  const showPoster = reduceMotion || videoFailed || !videoReady
 
   useEffect(() => {
     const sync = () => setReduceMotion(isReducedMotion())
@@ -85,6 +88,7 @@ export function HeroVideoScroll({ children }: Props) {
     if (!video || reduceMotion) return
 
     setVideoReady(false)
+    setVideoFailed(false)
     durationRef.current = 0
 
     const showFirstFrame = () => {
@@ -184,7 +188,7 @@ export function HeroVideoScroll({ children }: Props) {
         <div className="pointer-events-none absolute inset-0 size-full overflow-hidden" aria-hidden>
           <div
             className="absolute inset-0 origin-center will-change-transform transition-opacity duration-300"
-            style={{ ...motionStyle, opacity: videoReady ? 1 : 0 }}
+            style={{ ...motionStyle, opacity: videoReady && !videoFailed ? 1 : 0 }}
           >
             <video
               key={videoSrc}
@@ -194,13 +198,21 @@ export function HeroVideoScroll({ children }: Props) {
               playsInline
               preload="auto"
               disablePictureInPicture
+              poster={POSTER_SRC}
+              onError={() => setVideoFailed(true)}
             >
               <source src={videoSrc} type="video/mp4" />
             </video>
           </div>
 
-          {!videoReady && (
-            <div className="absolute inset-0 bg-[#1a1a1a]" aria-hidden />
+          {showPoster && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={POSTER_SRC}
+              alt=""
+              className="absolute inset-0 size-full object-cover"
+              aria-hidden
+            />
           )}
 
           <div
