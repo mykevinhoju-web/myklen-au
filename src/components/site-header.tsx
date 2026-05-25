@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect, useId, useRef, useState } from 'react'
+import { BrandLogo } from '@/components/brand-logo'
 import { MascotLogo } from '@/components/mascot-logo'
 import { useScrollMascot } from '@/context/scroll-mascot'
 import { btnHover } from '@/lib/motion-classes'
@@ -178,14 +179,15 @@ function FloatingNavPill({
       <div className="flex h-[3.75rem] items-center gap-2.5 px-3.5 sm:h-16 sm:gap-3 sm:px-4 lg:px-5">
         <Link
           href="/"
-          className="flex min-w-0 shrink-0 items-center gap-2.5"
+          className="flex min-w-0 shrink-0 items-center gap-0"
           aria-label="myklen — home"
           onClick={closeAll}
         >
           <MascotLogo reveal={mascotReveal} className="!h-9 sm:!h-10" />
-          <span className="font-brand hidden text-[#0a0a0a] min-[400px]:inline">
-            myklen
-          </span>
+          <BrandLogo
+            priority
+            className="-ml-1.5 !h-8 !max-w-[8.5rem] sm:-ml-2 sm:!h-9 sm:!max-w-[9.75rem]"
+          />
         </Link>
 
         <nav
