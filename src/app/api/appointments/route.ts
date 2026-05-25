@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import { storageErrorResponse } from '@/lib/api-error'
 import { getCurrentClientUser, isAdminAuthenticated } from '@/lib/auth'
 import { loadAppointments, saveAppointments } from '@/lib/appointments-store'
 import { normalizeAppointment } from '@/lib/appointment-notes'
@@ -13,14 +14,18 @@ export async function GET() {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  const all = await loadAppointments()
-  const sorted = [...all].sort((a, b) => a.scheduledAt.localeCompare(b.scheduledAt))
+  try {
+    const all = await loadAppointments()
+    const sorted = [...all].sort((a, b) => a.scheduledAt.localeCompare(b.scheduledAt))
 
-  if (admin) {
-    return NextResponse.json(sorted)
+    if (admin) {
+      return NextResponse.json(sorted)
+    }
+
+    return NextResponse.json(sorted.filter((a) => a.userId === user!.id))
+  } catch (error) {
+    return storageErrorResponse(error)
   }
-
-  return NextResponse.json(sorted.filter((a) => a.userId === user!.id))
 }
 
 export async function POST(request: Request) {
@@ -64,8 +69,12 @@ export async function POST(request: Request) {
     createdAt: new Date().toISOString(),
   }
 
-  const appointments = await loadAppointments()
-  appointments.push(appointment)
-  await saveAppointments(appointments)
-  return NextResponse.json(normalizeAppointment(appointment), { status: 201 })
+  try {
+    const appointments = await loadAppointments()
+    appointments.push(appointment)
+    await saveAppointments(appointments)
+    return NextResponse.json(normalizeAppointment(appointment), { status: 201 })
+  } catch (error) {
+    return storageErrorResponse(error)
+  }
 }

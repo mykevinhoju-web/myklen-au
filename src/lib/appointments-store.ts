@@ -1,10 +1,10 @@
 import { normalizeAppointment } from './appointment-notes'
-import { loadJson, saveJson } from './json-store'
+import { loadJson, saveJson, usesRemoteDataStore } from './json-store'
 import type { CleaningAppointment } from './types'
 
 const FILE = 'appointments.json'
 
-/** In-memory cache — avoids re-reading/parsing JSON on every API call (main slowdown as data grows). */
+/** In-memory cache — local dev only (serverless instances must read blob each time). */
 let cached: CleaningAppointment[] | null = null
 
 function hydrate(list: CleaningAppointment[]) {
@@ -13,23 +13,22 @@ function hydrate(list: CleaningAppointment[]) {
 }
 
 export async function loadAppointments() {
-  if (cached) return cached
+  if (!usesRemoteDataStore() && cached) return cached
   const raw = await loadJson<CleaningAppointment[]>(FILE)
   return hydrate(raw)
 }
 
 export async function saveAppointments(appointments: CleaningAppointment[]) {
-  cached = appointments.map(normalizeAppointment)
+  const normalized = appointments.map(normalizeAppointment)
+  if (usesRemoteDataStore()) {
+    await saveJson(FILE, normalized, { compact: true })
+    return normalized
+  }
+  cached = normalized
   await saveJson(FILE, cached, { compact: true })
+  return cached
 }
 
 export function invalidateAppointmentsCache() {
   cached = null
-}
-
-export async function listAppointmentsForUser(userId: string) {
-  const all = await loadAppointments()
-  return all
-    .filter((a) => a.userId === userId)
-    .sort((a, b) => a.scheduledAt.localeCompare(b.scheduledAt))
 }

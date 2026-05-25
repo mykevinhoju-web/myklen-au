@@ -27,6 +27,16 @@ Both running together:
 | kshop-au | `npm run dev` | http://localhost:3000 |
 | myklen-au | `npm run dev` | http://localhost:3001 |
 
+## Production data on Vercel (appointments, clients, messages)
+
+Local dev writes to `data/*.json`. On Vercel you need **Blob storage** or saves are lost.
+
+1. Vercel project → **Storage** → **Create Database** → **Blob** → connect to this app  
+2. **Redeploy** (adds `BLOB_READ_WRITE_TOKEN`)  
+3. First request copies `data/*.json` from the repo into Blob if empty  
+
+After that, admin schedule and customer notes persist on **myklen.com.au**.
+
 ## Stripe (package sales — Phase 1)
 
 1. Copy `.env.local.example` → `.env.local`  

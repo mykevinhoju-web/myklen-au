@@ -1,16 +1,14 @@
-import { readFile, writeFile } from 'fs/promises'
-import path from 'path'
+import { loadJson, saveJson } from './json-store'
 import type { StarterPackage } from './types'
 
-const FILE = path.join(process.cwd(), 'data', 'packages.json')
+const FILE = 'packages.json'
 
 export async function loadPackages() {
-  const raw = await readFile(FILE, 'utf8')
-  return JSON.parse(raw) as StarterPackage[]
+  return loadJson<StarterPackage[]>(FILE)
 }
 
 export async function savePackages(packages: StarterPackage[]) {
-  await writeFile(FILE, JSON.stringify(packages, null, 2), 'utf8')
+  await saveJson(FILE, packages)
 }
 
 export async function getActivePackages() {
