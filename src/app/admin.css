@@ -47,11 +47,44 @@
   color: var(--admin-ink);
 }
 
+.admin-panel .appointment-form__datetime {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.admin-panel .appointment-form__datetime-part {
+  display: flex;
+  flex: 1 1 8.5rem;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+.admin-panel .appointment-form__datetime-sublabel {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--admin-muted);
+}
+
+.admin-panel .appointment-form__datetime-part input[type='date'],
+.admin-panel .appointment-form__datetime-part input[type='time'] {
+  cursor: pointer;
+}
+
+.admin-panel .appointment-form__datetime-part input[type='date']::-webkit-calendar-picker-indicator,
+.admin-panel .appointment-form__datetime-part input[type='time']::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+}
+
 .admin-panel .form-field {
   margin-bottom: 1.25rem;
 }
 
-.admin-panel .form-field label {
+.admin-panel .form-field label,
+.admin-panel .form-field .form-field__label {
   display: block;
   margin-bottom: 0.5rem;
   font-size: 0.75rem;

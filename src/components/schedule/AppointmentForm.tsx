@@ -1,6 +1,7 @@
 'use client'
 
 import type { AppointmentDraft } from '@/lib/appointment-draft'
+import { joinDatetimeLocal, splitDatetimeLocal } from '@/lib/calendar-utils'
 import type { AppointmentStatus, ClientUserPublic } from '@/lib/types'
 
 export type { AppointmentDraft }
@@ -22,6 +23,12 @@ export function AppointmentForm({
   onCancel,
   onDelete,
 }: AppointmentFormProps) {
+  const { date: scheduleDate, time: scheduleTime } = splitDatetimeLocal(draft.scheduledAtLocal)
+
+  function patchScheduleDateTime(date: string, time: string) {
+    onChange({ ...draft, scheduledAtLocal: joinDatetimeLocal(date, time) })
+  }
+
   return (
     <div className="appointment-form">
       <h2 className="appointment-form__title">
@@ -51,12 +58,35 @@ export function AppointmentForm({
         />
       </div>
       <div className="form-field">
-        <label>Date & time</label>
-        <input
-          type="datetime-local"
-          value={draft.scheduledAtLocal}
-          onChange={(e) => onChange({ ...draft, scheduledAtLocal: e.target.value })}
-        />
+        <span className="form-field__label">Date & time</span>
+        <div className="appointment-form__datetime">
+          <div className="appointment-form__datetime-part">
+            <label className="appointment-form__datetime-sublabel" htmlFor="apt-date">
+              Date
+            </label>
+            <input
+              id="apt-date"
+              type="date"
+              value={scheduleDate}
+              onChange={(e) => patchScheduleDateTime(e.target.value, scheduleTime)}
+              dir="ltr"
+              required
+            />
+          </div>
+          <div className="appointment-form__datetime-part">
+            <label className="appointment-form__datetime-sublabel" htmlFor="apt-time">
+              Time
+            </label>
+            <input
+              id="apt-time"
+              type="time"
+              value={scheduleTime}
+              onChange={(e) => patchScheduleDateTime(scheduleDate, e.target.value)}
+              dir="ltr"
+              required
+            />
+          </div>
+        </div>
       </div>
       <div className="form-field">
         <label>Status</label>

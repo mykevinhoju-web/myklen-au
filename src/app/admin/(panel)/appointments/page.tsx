@@ -178,6 +178,10 @@ export default function AdminAppointmentsPage() {
               key={`thread-${threadVisit.id}`}
               appointment={threadVisit}
               mode="admin"
+              clientDisplayName={
+                usersById[threadVisit.userId]?.displayName ??
+                usersById[threadVisit.userId]?.username
+              }
               onUpdated={handleAppointmentUpdated}
               onEditSchedule={() => openEdit(threadVisit)}
             />

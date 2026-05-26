@@ -544,22 +544,50 @@
   vertical-align: middle;
 }
 
-.portal-shell .visit-notes-panel__title {
+.portal-shell .visit-notes-panel__title,
+.admin-panel .visit-notes-panel__title {
   margin: 0 0 0.25rem;
   font-size: 1.125rem;
   font-weight: 700;
 }
 
-.portal-shell .visit-notes-panel__meta {
+.portal-shell .visit-notes-panel__title-wrap,
+.admin-panel .visit-notes-panel__title-wrap {
+  min-width: 0;
+}
+
+.portal-shell .visit-notes-panel__client-name,
+.admin-panel .visit-notes-panel__client-name {
+  margin: 0.125rem 0 0;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--portal-ink);
+}
+
+.admin-panel .visit-notes-panel__client-name {
+  color: var(--admin-ink);
+}
+
+.portal-shell .visit-notes-panel__meta,
+.admin-panel .visit-notes-panel__meta {
   margin: 0;
   font-size: 0.8125rem;
   color: var(--portal-muted);
 }
 
-.portal-shell .visit-notes-panel__head {
+.admin-panel .visit-notes-panel__meta {
+  color: var(--admin-muted);
+}
+
+.portal-shell .visit-notes-panel__head,
+.admin-panel .visit-notes-panel__head {
   margin-bottom: 1rem;
   padding-bottom: 0.75rem;
   border-bottom: 1px solid var(--portal-line);
+}
+
+.admin-panel .visit-notes-panel__head {
+  border-bottom-color: var(--admin-line);
 }
 
 .portal-shell .visit-notes-panel__head-row,
@@ -637,6 +665,20 @@
   border-left-color: var(--admin-line);
 }
 
+.portal-shell .visit-thread__content,
+.admin-panel .visit-thread__content {
+  flex: 1;
+  min-width: 0;
+}
+
+.portal-shell .visit-thread__meta,
+.admin-panel .visit-thread__meta {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
 .portal-shell .visit-thread__text,
 .admin-panel .visit-thread__text {
   flex: 1;
@@ -644,6 +686,29 @@
   font-size: 0.9375rem;
   line-height: 1.5;
   white-space: pre-wrap;
+}
+
+.portal-shell .visit-thread__author,
+.admin-panel .visit-thread__author {
+  flex-shrink: 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--portal-muted);
+  white-space: nowrap;
+}
+
+.admin-panel .visit-thread__author {
+  color: var(--admin-muted);
+}
+
+.portal-shell .visit-thread__author--admin,
+.admin-panel .visit-thread__author--admin {
+  color: var(--launch-olive-deep, #3d4f3a);
+}
+
+.admin-panel .visit-thread__author--admin {
+  color: #6b8f67;
 }
 
 .portal-shell .visit-thread__del,

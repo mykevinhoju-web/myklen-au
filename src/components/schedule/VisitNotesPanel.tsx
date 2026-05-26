@@ -12,13 +12,26 @@ import type { CleaningAppointment } from '@/lib/types'
 type VisitNotesPanelProps = {
   appointment: CleaningAppointment
   mode: 'admin' | 'client'
+  /** Admin view: client name shown in header and on client messages */
+  clientDisplayName?: string
   onUpdated: (apt: CleaningAppointment) => void
   onEditSchedule?: () => void
+}
+
+function threadAuthorLabel(
+  author: 'client' | 'admin',
+  mode: 'admin' | 'client',
+  clientDisplayName?: string,
+): string {
+  if (author === 'admin') return 'Admin'
+  if (mode === 'client') return 'You'
+  return clientDisplayName ?? 'Client'
 }
 
 export function VisitNotesPanel({
   appointment,
   mode,
+  clientDisplayName,
   onUpdated,
   onEditSchedule,
 }: VisitNotesPanelProps) {
@@ -126,7 +139,12 @@ export function VisitNotesPanel({
     <section className="schedule-page__panel visit-notes-panel">
       <header className="visit-notes-panel__head">
         <div className="visit-notes-panel__head-row">
-          <h2 className="visit-notes-panel__title">{appointment.title}</h2>
+          <div className="visit-notes-panel__title-wrap">
+            <h2 className="visit-notes-panel__title">{appointment.title}</h2>
+            {mode === 'admin' && clientDisplayName ? (
+              <p className="visit-notes-panel__client-name">{clientDisplayName}</p>
+            ) : null}
+          </div>
           {mode === 'admin' && onEditSchedule && (
             <button type="button" className="visit-notes-panel__edit-link" onClick={onEditSchedule}>
               Edit schedule
@@ -145,29 +163,48 @@ export function VisitNotesPanel({
         {thread.length === 0 && (
           <li className="visit-thread__empty">No messages yet.</li>
         )}
-        {thread.map((msg) => (
-          <li
-            key={msg.id}
-            className={[
-              'visit-thread__item',
-              msg.author === 'admin' && 'visit-thread__item--reply',
-            ]
-              .filter(Boolean)
-              .join(' ')}
-          >
-            <p className="visit-thread__text">{msg.body}</p>
-            {canDelete(msg.author) && (
-              <button
-                type="button"
-                className="visit-thread__del"
-                onClick={() => deleteMessage(msg.id)}
-                disabled={saving}
-              >
-                del
-              </button>
-            )}
-          </li>
-        ))}
+        {thread.map((msg) => {
+          const label = threadAuthorLabel(msg.author, mode, clientDisplayName)
+          const isAdminMsg = msg.author === 'admin'
+
+          return (
+            <li
+              key={msg.id}
+              className={[
+                'visit-thread__item',
+                isAdminMsg && 'visit-thread__item--reply',
+              ]
+                .filter(Boolean)
+                .join(' ')}
+            >
+              <div className="visit-thread__content">
+                <div className="visit-thread__meta">
+                  <p className="visit-thread__text">{msg.body}</p>
+                  <span
+                    className={[
+                      'visit-thread__author',
+                      isAdminMsg && 'visit-thread__author--admin',
+                    ]
+                      .filter(Boolean)
+                      .join(' ')}
+                  >
+                    {label}
+                  </span>
+                </div>
+              </div>
+              {canDelete(msg.author) && (
+                <button
+                  type="button"
+                  className="visit-thread__del"
+                  onClick={() => deleteMessage(msg.id)}
+                  disabled={saving}
+                >
+                  del
+                </button>
+              )}
+            </li>
+          )
+        })}
       </ul>
 
       <form className="visit-thread__compose" onSubmit={sendMessage}>

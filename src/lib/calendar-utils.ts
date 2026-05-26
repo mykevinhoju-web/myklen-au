@@ -115,3 +115,18 @@ export function datetimeLocalForDate(date: Date, hour = 9, minute = 0) {
   d.setHours(hour, minute, 0, 0)
   return toDatetimeLocal(d.toISOString())
 }
+
+export function splitDatetimeLocal(value: string) {
+  if (!value?.includes('T')) {
+    return { date: '', time: '09:00' }
+  }
+  const [date, timePart] = value.split('T')
+  const time = (timePart ?? '09:00').slice(0, 5)
+  return { date: date ?? '', time: time || '09:00' }
+}
+
+export function joinDatetimeLocal(date: string, time: string) {
+  if (!date) return ''
+  const t = time?.slice(0, 5) || '09:00'
+  return `${date}T${t}`
+}
