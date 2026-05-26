@@ -1,10 +1,13 @@
-import { loadJson, saveJson } from './json-store'
+import { readFile } from 'fs/promises'
+import { dataFilePath, saveJson } from './json-store'
 import type { StarterPackage } from './types'
 
 const FILE = 'packages.json'
 
+/** Pricing and copy live in git (`data/packages.json`), not Vercel Blob. */
 export async function loadPackages() {
-  return loadJson<StarterPackage[]>(FILE)
+  const raw = await readFile(dataFilePath(FILE), 'utf-8')
+  return JSON.parse(raw) as StarterPackage[]
 }
 
 export async function savePackages(packages: StarterPackage[]) {

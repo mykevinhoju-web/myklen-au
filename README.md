@@ -53,6 +53,8 @@ Local dev writes to `data/*.json`. On Vercel you need **Blob storage** or saves 
 
 After that, admin schedule and customer notes persist on **myklen.com.au**.
 
+**Package prices** on the marketing site always come from `data/packages.json` in the repo (commit + push + redeploy). They are not read from Blob.
+
 ## Stripe (package sales — Phase 1)
 
 1. Copy `.env.local.example` → `.env.local`  
