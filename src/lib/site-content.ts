@@ -61,11 +61,6 @@ export const homeLaunchBoard = {
   eyebrow: 'Launch planning',
   title: 'What it takes to start',
   lead: 'Starting a cleaning business is an investment in tools, training, and local trust — not guesswork.',
-  bullets: [
-    'Choose a package tier that matches your pace — training, branding, and booking tools included.',
-    'Set aside time to learn and practise before you scale — confidence comes before volume.',
-    'Grow locally with your booking link, reviews, and neighbourhood outreach.',
-  ],
   cards: [
     {
       title: 'Package & tools',
