@@ -3,8 +3,11 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { isReducedMotion } from '@/lib/motion-preference'
 
-const VIDEO_DESKTOP = '/hero/hero-scene.mp4'
-const VIDEO_MOBILE = '/hero/hero-scene-mobile.mp4'
+/** Bump when replacing hero-scene*.mp4 so browsers skip cached old files */
+const HERO_VIDEO_CACHE_VERSION = 'running-v1'
+
+const VIDEO_DESKTOP = `/hero/hero-scene.mp4?v=${HERO_VIDEO_CACHE_VERSION}`
+const VIDEO_MOBILE = `/hero/hero-scene-mobile.mp4?v=${HERO_VIDEO_CACHE_VERSION}`
 const POSTER_SRC = '/hero/hero-poster.png'
 
 type Props = {
