@@ -220,7 +220,7 @@ function FloatingNavPill({
 
         <div className="hidden shrink-0 items-center gap-2 lg:flex lg:pl-1">
           <Link
-            href="/manager/login"
+            href="/customer/login"
             className="whitespace-nowrap rounded-lg px-2 py-1.5 text-sm font-medium text-[#5c5c5c] hover:text-[#0a0a0a] xl:px-2.5 xl:text-[0.9375rem]"
           >
             Login
@@ -305,11 +305,11 @@ function FloatingNavPill({
                 {exploreOpen && <ExplorePanel onNavigate={closeAll} />}
                 <div className="mt-2 space-y-1 border-t border-black/8 pt-2">
                   <Link
-                    href="/manager/login"
+                    href="/customer/login"
                     className="block rounded-lg px-3 py-3 text-[0.9375rem] font-medium text-[#0a0a0a]/90 hover:bg-black/5"
                     onClick={closeAll}
                   >
-                    Manager login
+                    Login
                   </Link>
                   <Link
                     href="/packages"

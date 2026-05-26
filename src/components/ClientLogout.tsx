@@ -7,7 +7,7 @@ export function ClientLogout() {
 
   async function logout() {
     await fetch('/api/auth/logout', { method: 'POST' })
-    router.push('/customer/login')
+    router.push('/')
     router.refresh()
   }
 
