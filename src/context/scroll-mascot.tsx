@@ -42,7 +42,7 @@ export function useScrollMascot() {
 
 export function ScrollMascotProvider({ children }: { children: ReactNode }) {
   const pathname = usePathname()
-  const isHome = pathname === '/'
+  const isHome = pathname === '/' || pathname === '/ko'
   const [reveal, setReveal] = useState(0)
 
   const updateReveal = useCallback(() => {

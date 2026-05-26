@@ -1,11 +1,18 @@
 /** Marketing copy — home cleaning business launch platform (en-AU) */
 
 export const sitePositioning = {
-  tagline: 'Not a booking site — a business launch platform',
-  headline: 'Start a home cleaning business',
-  headlineAccent: 'anyone can grow',
-  subhead:
-    'Booking, client management, branding, and training — everything you need to launch under your own brand. Your customers book through your link, not a generic marketplace.',
+  tagline: '',
+  headlineLines: [
+    { lead: 'Start with ', accent: 'heart.' },
+    { lead: 'Grow through ', accent: 'trust.' },
+  ],
+  subhead: [
+    'It started with one person delivering catalogs door to door.',
+    [
+      'Today, we help cleaners build trusted businesses',
+      'through sincerity, effort, and real connection.',
+    ],
+  ],
 } as const
 
 export const homeOfferings = [

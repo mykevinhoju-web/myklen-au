@@ -4,14 +4,15 @@
     "slug": "starter",
     "name": "Starter",
     "tier": "starter",
-    "priceAud": 993,
-    "description": "Launch with core training, booking path, and review tools — ideal for your first local clients.",
+    "priceAud": 499,
+    "description": "Launch with core training, booking tools, and business essentials — ideal for cleaners starting their first local client base.",
     "highlights": [
       "Online cleaning & business training",
       "Booking system access (phased)",
       "Reviews & feedback setup",
-      "Business card & flyer templates",
-      "Starter supply list"
+      "Business card & flyer templates guidelines",
+      "Team shirts & branded materials",
+      "Starter supply checklist"
     ],
     "featured": false,
     "active": true
@@ -21,14 +22,17 @@
     "slug": "growth",
     "name": "Growth",
     "tier": "growth",
-    "priceAud": 2490,
-    "description": "Professional branding plus customer-win training — look established and grow faster.",
+    "priceAud": 1490,
+    "description": "Designed for cleaners ready to expand, attract repeat customers, and build a stronger local presence.",
     "highlights": [
-      "Everything in Starter",
-      "Print-ready catalogue & pamphlet artwork",
-      "Branded uniform guidance",
-      "Local customer acquisition training",
-      "Subdomain booking (yourname.myklen.com.au)"
+      
+      "Everything in Starter", 
+      "Advanced client booking features",
+      "Customer follow-up & retention tools",
+      "Premium marketing templates",
+      "Social media growth guidance",
+      "Cleaning workflow training"
+
     ],
     "featured": true,
     "active": true
@@ -38,14 +42,17 @@
     "slug": "premium",
     "name": "Premium",
     "tier": "premium",
-    "priceAud": 4990,
-    "description": "Full launch partner — advanced training, 1:1 onboarding, marketing support, and custom domain option.",
+    "priceAud": 2490,
+    "description": "A complete system for serious cleaners who want professional branding, advanced support, and long-term business growth.",
     "highlights": [
       "Everything in Growth",
-      "1:1 onboarding session",
-      "Priority support & marketing kit",
-      "Custom domain for your portal (Phase 3)",
-      "Early CRM & scheduling access"
+      "Premium business coaching",
+      "Priority platform support",
+      "Advanced automation tools",
+      "Custom brand assistance",
+      "Team expansion guidance",
+      "Premium cleaning kits & materials",
+      "Ongoing strategy training"
     ],
     "featured": false,
     "active": true

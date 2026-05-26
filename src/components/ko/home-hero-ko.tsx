@@ -4,37 +4,33 @@ import Link from 'next/link'
 import { HeroSubhead } from '@/components/hero-subhead'
 import { HeroVideoScroll } from '@/components/hero-video-scroll'
 import { btnHover } from '@/lib/motion-classes'
-import { sitePositioning } from '@/lib/site-content'
+import { koSite } from '@/lib/site-content-ko'
 
-export function HomeHero() {
+export function HomeHeroKo() {
+  const { hero } = koSite
   return (
     <HeroVideoScroll>
-      {sitePositioning.tagline ? (
-        <p className="type-eyebrow text-[var(--hero-accent)]">{sitePositioning.tagline}</p>
-      ) : null}
-      <h1
-        className={`type-display max-w-4xl text-[2.125rem] text-[#0a0a0a] sm:text-5xl lg:text-[3.5rem] ${sitePositioning.tagline ? 'mt-6' : 'mt-0'}`}
-      >
-        {sitePositioning.headlineLines.map((line, i) => (
+      <h1 className="type-display max-w-4xl text-[2.125rem] text-[#0a0a0a] sm:text-5xl lg:text-[3.5rem]">
+        {hero.headlineLines.map((line, i) => (
           <span key={line.accent} className={i > 0 ? 'mt-1 block' : 'block'}>
             {line.lead}
             <span className="text-[var(--hero-accent)]">{line.accent}</span>
           </span>
         ))}
       </h1>
-      <HeroSubhead blocks={sitePositioning.subhead} />
+      <HeroSubhead blocks={hero.subhead} lang="ko" />
       <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
         <Link
-          href="/packages"
+          href="/ko#packages"
           className={`rounded-full bg-[var(--hero-accent)] px-6 py-3 text-sm font-semibold text-white hover:bg-[#a81832] ${btnHover}`}
         >
-          Start your business
+          {hero.ctaPrimary}
         </Link>
         <Link
-          href="/#how-it-works"
+          href="/ko#how-it-works"
           className={`rounded-full border border-[#0a0a0a]/20 bg-white/75 px-6 py-3 text-sm font-semibold text-[#0a0a0a] backdrop-blur-sm hover:bg-white ${btnHover}`}
         >
-          See how it works
+          {hero.ctaSecondary}
         </Link>
       </div>
     </HeroVideoScroll>

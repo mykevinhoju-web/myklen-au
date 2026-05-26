@@ -28,7 +28,7 @@ export function ScrollHeroBleed() {
   useEffect(() => {
     const root = document.documentElement
 
-    if (pathname !== '/') {
+    if (pathname !== '/' && pathname !== '/ko') {
       root.removeAttribute('data-hero-bleed')
       root.style.removeProperty('--hero-bleed')
       display.current = 0

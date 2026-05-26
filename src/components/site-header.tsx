@@ -7,56 +7,28 @@ import { BrandLogo } from '@/components/brand-logo'
 import { MascotLogo } from '@/components/mascot-logo'
 import { useScrollMascot } from '@/context/scroll-mascot'
 import { btnHover } from '@/lib/motion-classes'
+import {
+  getLocaleNavCopy,
+  getLocalePageDescription,
+  isLocaleActive,
+  localeHomeHref,
+  localePages,
+} from '@/lib/locale-pages'
 
 const navLinks = [
   { href: '/packages', label: 'Packages' },
   { href: '/partner', label: 'Partner' },
   { href: '/training', label: 'Training' },
-  { href: '/#about', label: 'About' },
+  { href: 'about', label: 'About' },
 ] as const
 
-const exploreLinks = [
-  {
-    id: 'customers',
-    href: '/for-customers',
-    label: 'For customers',
-    description: 'Book through a local manager',
-    icon: 'C',
-    tileClass: 'bg-black/[0.04]',
-    iconClass: 'bg-[#0a0a0a] text-white',
-  },
-  {
-    id: 'partner',
-    href: '/partner',
-    label: 'Become a partner',
-    description: 'Start your cleaning business',
-    icon: 'P',
-    tileClass: 'bg-black/[0.04]',
-    iconClass: 'bg-[var(--myklen-teal)] text-white',
-  },
-  {
-    id: 'packages',
-    href: '/packages',
-    label: 'Packages',
-    description: 'Starter, Growth, Premium',
-    icon: '$',
-    tileClass: 'bg-black/[0.04]',
-    iconClass: 'bg-[#3a3a3a] text-white',
-  },
-  {
-    id: 'shop',
-    href: '/shop',
-    label: 'Supplies',
-    description: 'Tools & consumables',
-    icon: 'S',
-    tileClass: 'bg-black/[0.04]',
-    iconClass: 'bg-[#5c5c5c] text-white',
-  },
-] as const
+function resolveNavHref(pathname: string, href: string) {
+  if (href === 'about') return `${localeHomeHref(pathname)}#about`
+  return href
+}
 
 function isNavActive(pathname: string, href: string) {
-  if (href === '/#about') return pathname === '/'
-  if (href.startsWith('/#')) return false
+  if (href === 'about') return pathname === '/' || pathname === '/ko'
   return pathname === href || pathname.startsWith(`${href}/`)
 }
 
@@ -107,27 +79,47 @@ function NavLink({
   )
 }
 
-function ExplorePanel({ onNavigate }: { onNavigate?: () => void }) {
+function LanguagePanel({
+  pathname,
+  onNavigate,
+}: {
+  pathname: string
+  onNavigate?: () => void
+}) {
+  const navCopy = getLocaleNavCopy(pathname)
   return (
-    <div className="grid grid-cols-2 gap-2.5 p-2.5">
-      {exploreLinks.map((item) => (
-        <Link
-          key={item.id}
-          href={item.href}
-          onClick={onNavigate}
-          className={`flex flex-col items-center gap-2.5 rounded-xl px-3 py-5 transition-colors hover:bg-black/[0.03] ${item.tileClass}`}
-        >
-          <span
-            className={`flex h-10 w-11 items-center justify-center rounded-full text-sm font-bold ${item.iconClass}`}
-          >
-            {item.icon}
-          </span>
-          <span className="flex flex-col items-center text-center">
-            <span className="text-sm font-medium text-[#0a0a0a]">{item.label}</span>
-            <span className="mt-0.5 text-xs font-medium text-[#5c5c5c]">{item.description}</span>
-          </span>
-        </Link>
-      ))}
+    <div className="p-2.5">
+      <p className="px-3 pb-2 text-xs font-medium text-[#5c5c5c]">{navCopy.panelHint}</p>
+      <div className="grid grid-cols-2 gap-2">
+        {localePages.map((item) => {
+          const active = isLocaleActive(pathname, item.href)
+          return (
+            <Link
+              key={item.id}
+              href={item.href}
+              onClick={onNavigate}
+              className={`flex flex-col items-center gap-2.5 rounded-xl px-3 py-5 transition-colors hover:bg-black/[0.03] ${
+                active ? 'bg-black/[0.06] ring-1 ring-[#0a0a0a]/12' : 'bg-black/[0.04]'
+              }`}
+              aria-current={active ? 'page' : undefined}
+            >
+              <span
+                className="locale-flag flex h-11 w-11 items-center justify-center rounded-full bg-white text-[1.75rem] leading-none shadow-sm ring-1 ring-black/10"
+                role="img"
+                aria-label={item.flagLabel}
+              >
+                {item.flag}
+              </span>
+              <span className="flex flex-col items-center text-center">
+                <span className="text-sm font-medium text-[#0a0a0a]">{item.label}</span>
+                <span className="mt-0.5 text-xs font-medium text-[#5c5c5c]">
+                  {getLocalePageDescription(item.id, pathname)}
+                </span>
+              </span>
+            </Link>
+          )
+        })}
+      </div>
     </div>
   )
 }
@@ -137,35 +129,37 @@ function FloatingNavPill({
   mascotReveal,
   menuOpen,
   setMenuOpen,
-  exploreOpen,
-  setExploreOpen,
+  localeOpen,
+  setLocaleOpen,
   menuId,
 }: {
   pathname: string
   mascotReveal: number
   menuOpen: boolean
   setMenuOpen: (v: boolean | ((o: boolean) => boolean)) => void
-  exploreOpen: boolean
-  setExploreOpen: (v: boolean | ((o: boolean) => boolean)) => void
+  localeOpen: boolean
+  setLocaleOpen: (v: boolean | ((o: boolean) => boolean)) => void
   menuId: string
 }) {
-  const expanded = menuOpen || exploreOpen
+  const expanded = menuOpen || localeOpen
   const pillRef = useRef<HTMLDivElement>(null)
+  const homeHref = localeHomeHref(pathname)
+  const localeNav = getLocaleNavCopy(pathname)
 
   useEffect(() => {
     if (!expanded) return
     const onPointerDown = (e: PointerEvent) => {
       if (!pillRef.current?.contains(e.target as Node)) {
-        setExploreOpen(false)
+        setLocaleOpen(false)
         setMenuOpen(false)
       }
     }
     document.addEventListener('pointerdown', onPointerDown)
     return () => document.removeEventListener('pointerdown', onPointerDown)
-  }, [expanded, setExploreOpen, setMenuOpen])
+  }, [expanded, setLocaleOpen, setMenuOpen])
 
   const closeAll = () => {
-    setExploreOpen(false)
+    setLocaleOpen(false)
     setMenuOpen(false)
   }
 
@@ -178,7 +172,7 @@ function FloatingNavPill({
     >
       <div className="flex h-[3.75rem] items-center gap-2.5 px-3.5 sm:h-16 sm:gap-3 sm:px-4 lg:px-5">
         <Link
-          href="/"
+          href={homeHref}
           className="flex min-w-0 shrink-0 items-center gap-2 sm:gap-2.5"
           aria-label="myklen — home"
           onClick={closeAll}
@@ -197,21 +191,23 @@ function FloatingNavPill({
           <button
             type="button"
             className={`flex shrink-0 items-center gap-1 rounded-lg px-2 py-1.5 text-sm font-medium transition-colors xl:px-2.5 xl:text-[0.9375rem] ${
-              exploreOpen ? 'text-[#0a0a0a]' : 'text-[#5c5c5c] hover:text-[#0a0a0a]'
+              localeOpen ? 'text-[#0a0a0a]' : 'text-[#5c5c5c] hover:text-[#0a0a0a]'
             }`}
-            aria-expanded={exploreOpen}
+            aria-expanded={localeOpen}
+            aria-haspopup="true"
+            aria-label={localeNav.ariaLabel}
             onClick={() => {
               setMenuOpen(false)
-              setExploreOpen((o) => !o)
+              setLocaleOpen((o) => !o)
             }}
           >
-            Explore
-            <Chevron open={exploreOpen} />
+            {localeNav.menuLabel}
+            <Chevron open={localeOpen} />
           </button>
           {navLinks.map((item) => (
             <NavLink
               key={item.href}
-              href={item.href}
+              href={resolveNavHref(pathname, item.href)}
               label={item.label}
               pathname={pathname}
             />
@@ -239,7 +235,7 @@ function FloatingNavPill({
           aria-expanded={menuOpen}
           aria-controls={menuId}
           onClick={() => {
-            setExploreOpen(false)
+            setLocaleOpen(false)
             setMenuOpen((o) => !o)
           }}
         >
@@ -280,7 +276,7 @@ function FloatingNavPill({
                   {navLinks.map((item) => (
                     <li key={item.href}>
                       <Link
-                        href={item.href}
+                        href={resolveNavHref(pathname, item.href)}
                         onClick={closeAll}
                         className={`block rounded-lg px-3 py-3 text-[0.9375rem] font-medium ${
                           isNavActive(pathname, item.href)
@@ -296,13 +292,14 @@ function FloatingNavPill({
                 <button
                   type="button"
                   className="mb-2 flex w-full items-center justify-between rounded-lg px-3 py-3 text-left text-[0.9375rem] font-medium text-[#0a0a0a] hover:bg-black/5"
-                  aria-expanded={exploreOpen}
-                  onClick={() => setExploreOpen((o) => !o)}
+                  aria-expanded={localeOpen}
+                  aria-label={localeNav.ariaLabel}
+                  onClick={() => setLocaleOpen((o) => !o)}
                 >
-                  Explore
-                  <Chevron open={exploreOpen} />
+                  {localeNav.menuLabel}
+                  <Chevron open={localeOpen} />
                 </button>
-                {exploreOpen && <ExplorePanel onNavigate={closeAll} />}
+                {localeOpen && <LanguagePanel pathname={pathname} onNavigate={closeAll} />}
                 <div className="mt-2 space-y-1 border-t border-black/8 pt-2">
                   <Link
                     href="/customer/login"
@@ -321,9 +318,9 @@ function FloatingNavPill({
                 </div>
               </nav>
             )}
-            {exploreOpen && !menuOpen && (
+            {localeOpen && !menuOpen && (
               <div className="hidden border-t border-black/8 lg:block">
-                <ExplorePanel onNavigate={closeAll} />
+                <LanguagePanel pathname={pathname} onNavigate={closeAll} />
               </div>
             )}
           </div>
@@ -339,11 +336,11 @@ export function SiteHeader() {
   const pathname = usePathname()
   const menuId = useId()
   const [menuOpen, setMenuOpen] = useState(false)
-  const [exploreOpen, setExploreOpen] = useState(false)
+  const [localeOpen, setLocaleOpen] = useState(false)
 
   useEffect(() => {
     setMenuOpen(false)
-    setExploreOpen(false)
+    setLocaleOpen(false)
   }, [pathname])
 
   useEffect(() => {
@@ -351,7 +348,7 @@ export function SiteHeader() {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         setMenuOpen(false)
-        setExploreOpen(false)
+        setLocaleOpen(false)
       }
     }
     document.body.style.overflow = 'hidden'
@@ -363,13 +360,13 @@ export function SiteHeader() {
   }, [menuOpen])
 
   useEffect(() => {
-    if (!exploreOpen) return
+    if (!localeOpen) return
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setExploreOpen(false)
+      if (e.key === 'Escape') setLocaleOpen(false)
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [exploreOpen])
+  }, [localeOpen])
 
   return (
     <>
@@ -379,8 +376,8 @@ export function SiteHeader() {
         mascotReveal={mascotReveal}
         menuOpen={menuOpen}
         setMenuOpen={setMenuOpen}
-        exploreOpen={exploreOpen}
-        setExploreOpen={setExploreOpen}
+        localeOpen={localeOpen}
+        setLocaleOpen={setLocaleOpen}
         menuId={menuId}
       />
     </>
