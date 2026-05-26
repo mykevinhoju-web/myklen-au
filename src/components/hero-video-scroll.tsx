@@ -1,14 +1,12 @@
 'use client'
 
-import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react'
-import { isReducedMotion } from '@/lib/motion-preference'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 
 /** Bump when replacing hero-scene*.mp4 so browsers skip cached old files */
-const HERO_VIDEO_CACHE_VERSION = 'running-v2'
+const HERO_VIDEO_CACHE_VERSION = 'running-v3'
 
 const VIDEO_DESKTOP = `/hero/hero-scene.mp4?v=${HERO_VIDEO_CACHE_VERSION}`
 const VIDEO_MOBILE = `/hero/hero-scene-mobile.mp4?v=${HERO_VIDEO_CACHE_VERSION}`
-const POSTER_SRC = '/hero/hero-poster.png'
 
 type Props = {
   children: ReactNode
@@ -21,115 +19,43 @@ function pickVideoSrc() {
 
 export function HeroVideoScroll({ children }: Props) {
   const videoRef = useRef<HTMLVideoElement>(null)
-  const [reduceMotion, setReduceMotion] = useState(false)
-  const [isPlaying, setIsPlaying] = useState(false)
-  const [videoFailed, setVideoFailed] = useState(false)
   const [videoSrc, setVideoSrc] = useState(VIDEO_DESKTOP)
 
-  const showStillFallback = reduceMotion || videoFailed || !isPlaying
-
   useEffect(() => {
-    const sync = () => setReduceMotion(isReducedMotion())
-    sync()
-    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
-    mq.addEventListener('change', sync)
-    window.addEventListener('storage', sync)
-    return () => {
-      mq.removeEventListener('change', sync)
-      window.removeEventListener('storage', sync)
-    }
-  }, [])
-
-  useEffect(() => {
-    const apply = () => {
-      setIsPlaying(false)
-      setVideoFailed(false)
-      setVideoSrc(pickVideoSrc())
-    }
+    const apply = () => setVideoSrc(pickVideoSrc())
     apply()
     const mq = window.matchMedia('(max-width: 767px)')
     mq.addEventListener('change', apply)
     return () => mq.removeEventListener('change', apply)
   }, [])
 
-  const tryPlay = useCallback(async () => {
-    const video = videoRef.current
-    if (!video || reduceMotion) return false
-
-    video.muted = true
-    video.defaultMuted = true
-    video.playsInline = true
-
-    try {
-      await video.play()
-      return !video.paused
-    } catch {
-      return false
-    }
-  }, [reduceMotion])
-
   useEffect(() => {
     const video = videoRef.current
-    if (!video || reduceMotion) return
+    if (!video) return
 
-    setIsPlaying(false)
-    setVideoFailed(false)
-
-    let cancelled = false
-    let retryTimer: ReturnType<typeof setInterval> | undefined
-
-    const markPlaying = () => {
-      if (!cancelled) setIsPlaying(true)
+    const play = () => {
+      video.muted = true
+      video.defaultMuted = true
+      void video.play().catch(() => {})
     }
 
-    const onPlaying = () => markPlaying()
-    const onError = () => {
-      if (!cancelled) setVideoFailed(true)
-    }
+    video.addEventListener('canplay', play)
+    video.addEventListener('loadeddata', play)
 
-    const startPlayback = async () => {
-      for (let attempt = 0; attempt < 8 && !cancelled; attempt += 1) {
-        const ok = await tryPlay()
-        if (ok) {
-          markPlaying()
-          return
-        }
-        await new Promise((r) => setTimeout(r, 200))
-      }
-    }
+    const onGesture = () => play()
+    window.addEventListener('pointerdown', onGesture, { passive: true })
+    window.addEventListener('scroll', onGesture, { passive: true })
 
-    video.addEventListener('playing', onPlaying)
-    video.addEventListener('error', onError)
-    video.addEventListener('canplay', () => void startPlayback())
-    video.addEventListener('loadeddata', () => void startPlayback())
-
-    retryTimer = setInterval(() => {
-      if (!video.paused) {
-        markPlaying()
-        if (retryTimer) clearInterval(retryTimer)
-        return
-      }
-      void startPlayback()
-    }, 1200)
-
-    const onUserGesture = () => {
-      void startPlayback()
-    }
-    window.addEventListener('pointerdown', onUserGesture, { once: true, passive: true })
-    window.addEventListener('scroll', onUserGesture, { once: true, passive: true })
-
+    play()
     void video.load()
-    void startPlayback()
 
     return () => {
-      cancelled = true
-      if (retryTimer) clearInterval(retryTimer)
-      video.removeEventListener('playing', onPlaying)
-      video.removeEventListener('error', onError)
-      window.removeEventListener('pointerdown', onUserGesture)
-      window.removeEventListener('scroll', onUserGesture)
+      video.removeEventListener('canplay', play)
+      video.removeEventListener('loadeddata', play)
+      window.removeEventListener('pointerdown', onGesture)
+      window.removeEventListener('scroll', onGesture)
     }
-  }, [reduceMotion, videoSrc, tryPlay])
+  }, [videoSrc])
 
   return (
     <section
@@ -137,33 +63,18 @@ export function HeroVideoScroll({ children }: Props) {
       className="relative z-0 flex min-h-[100dvh] max-h-[52rem] items-center justify-center overflow-hidden supports-[min-height:100svh]:min-h-[100svh]"
     >
       <div className="pointer-events-none absolute inset-0 size-full overflow-hidden" aria-hidden>
-        {!reduceMotion && (
-          <video
-            key={videoSrc}
-            ref={videoRef}
-            className={`absolute inset-0 size-full object-cover transition-opacity duration-500 ${
-              isPlaying ? 'opacity-100' : 'opacity-0'
-            }`}
-            src={videoSrc}
-            muted
-            playsInline
-            autoPlay
-            loop
-            preload="auto"
-            disablePictureInPicture
-            onError={() => setVideoFailed(true)}
-          />
-        )}
-
-        {showStillFallback && (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={POSTER_SRC}
-            alt=""
-            className="absolute inset-0 size-full object-cover"
-            aria-hidden
-          />
-        )}
+        <video
+          key={videoSrc}
+          ref={videoRef}
+          className="absolute inset-0 size-full object-cover"
+          src={videoSrc}
+          muted
+          playsInline
+          autoPlay
+          loop
+          preload="auto"
+          disablePictureInPicture
+        />
 
         <div
           className="absolute inset-0 bg-gradient-to-b from-white/50 via-white/38 to-white/28 opacity-[0.46]"
