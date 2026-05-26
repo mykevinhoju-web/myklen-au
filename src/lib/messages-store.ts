@@ -1,10 +1,12 @@
 import { loadJson, saveJson } from './json-store'
+import { normalizeMessages } from './messages-normalize'
 import type { ClientMessage } from './types'
 
 const FILE = 'messages.json'
 
 export async function loadMessages() {
-  return loadJson<ClientMessage[]>(FILE)
+  const raw = await loadJson<unknown>(FILE)
+  return normalizeMessages(raw)
 }
 
 export async function saveMessages(messages: ClientMessage[]) {

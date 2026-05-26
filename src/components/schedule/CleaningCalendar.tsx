@@ -19,7 +19,10 @@ type CleaningCalendarProps = {
   appointments: CleaningAppointment[]
   mode: 'admin' | 'client'
   usersById?: Record<string, ClientUserPublic>
+  /** Client: click anywhere on the day cell */
   onDayClick?: (date: Date) => void
+  /** Admin: click date number only — always start a new visit for that day */
+  onDateClick?: (date: Date) => void
   onAppointmentClick?: (appointment: CleaningAppointment) => void
   selectedAppointmentId?: string | null
 }
@@ -29,6 +32,7 @@ export function CleaningCalendar({
   mode,
   usersById = {},
   onDayClick,
+  onDateClick,
   onAppointmentClick,
   selectedAppointmentId,
 }: CleaningCalendarProps) {
@@ -160,7 +164,8 @@ export function CleaningCalendar({
           >
           {days.map((day, index) => {
             const events = byDay.get(day.dateKey) ?? []
-            const clickable = day.inMonth && !!onDayClick
+            const clientCellClickable = mode === 'client' && day.inMonth && !!onDayClick
+            const adminDatePickable = mode === 'admin' && day.inMonth && !!onDateClick
             const dayHasUnreadNote = events.some(hasAlert)
             const row = Math.floor(index / 7)
             const col = index % 7
@@ -174,7 +179,7 @@ export function CleaningCalendar({
                   'schedule-calendar__cell',
                   !day.inMonth && 'schedule-calendar__cell--outside',
                   day.isToday && 'schedule-calendar__cell--today',
-                  clickable && 'schedule-calendar__cell--clickable',
+                  clientCellClickable && 'schedule-calendar__cell--clickable',
                   dayHasUnreadNote && 'schedule-calendar__cell--alert',
                   inHoverRow && 'schedule-calendar__cell--hover-row',
                   inHoverCol && 'schedule-calendar__cell--hover-col',
@@ -182,22 +187,36 @@ export function CleaningCalendar({
                 ]
                   .filter(Boolean)
                   .join(' ')}
-                role={clickable ? 'button' : undefined}
-                tabIndex={clickable ? 0 : undefined}
+                role={clientCellClickable ? 'button' : undefined}
+                tabIndex={clientCellClickable ? 0 : undefined}
                 onMouseEnter={
                   mode === 'client' ? () => enterHoverCell(row, col) : undefined
                 }
                 onClick={() => {
-                  if (clickable) onDayClick(day.date)
+                  if (clientCellClickable) onDayClick(day.date)
                 }}
                 onKeyDown={(e) => {
-                  if (clickable && (e.key === 'Enter' || e.key === ' ')) {
+                  if (clientCellClickable && (e.key === 'Enter' || e.key === ' ')) {
                     e.preventDefault()
                     onDayClick(day.date)
                   }
                 }}
               >
-                <span className="schedule-calendar__date">{day.date.getDate()}</span>
+                {adminDatePickable ? (
+                  <button
+                    type="button"
+                    className="schedule-calendar__date schedule-calendar__date--pick"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      onDateClick(day.date)
+                    }}
+                    aria-label={`Add visit on ${day.date.toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' })}`}
+                  >
+                    {day.date.getDate()}
+                  </button>
+                ) : (
+                  <span className="schedule-calendar__date">{day.date.getDate()}</span>
+                )}
                 <ul className="schedule-calendar__events">
                   {events.map((apt) => {
                     const alert = hasAlert(apt)
@@ -248,9 +267,9 @@ export function CleaningCalendar({
         </p>
       )}
 
-      {mode === 'admin' && onDayClick && (
+      {mode === 'admin' && onDateClick && (
         <p className="schedule-calendar__hint">
-          Click a day or visit to read notes for that date. Empty day = add a visit.{' '}
+          Click the <strong>date number</strong> to add a visit. Click a visit card for messages.{' '}
           <strong>!</strong> = unread client note (clears when you open that visit).
         </p>
       )}

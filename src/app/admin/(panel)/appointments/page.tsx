@@ -11,7 +11,6 @@ import {
   type AppointmentDraft,
 } from '@/lib/appointment-draft'
 import { showAlertForAdmin } from '@/lib/appointment-notes'
-import { dateKeyFromYMD, pickVisitOnDay } from '@/lib/calendar-utils'
 import type { CleaningAppointment, ClientUserPublic } from '@/lib/types'
 
 type ScheduleView =
@@ -115,16 +114,6 @@ export default function AdminAppointmentsPage() {
     setView({ kind: 'idle' })
   }
 
-  function selectDay(date: Date) {
-    const dateKey = dateKeyFromYMD(date.getFullYear(), date.getMonth(), date.getDate())
-    const visit = pickVisitOnDay(appointments, dateKey, showAlertForAdmin)
-    if (visit) {
-      openThread(visit)
-    } else {
-      openNewDraft(date)
-    }
-  }
-
   const unreadClientNotes = appointments.filter(showAlertForAdmin).length
 
   return (
@@ -133,8 +122,8 @@ export default function AdminAppointmentsPage() {
         <div>
           <h1 className="admin-page-title">Cleaning schedule</h1>
           <p className="admin-page-lead">
-            Click a day or visit for messages. Empty day = new visit. <strong>!</strong> = unread
-            (clears when opened).
+            Click the date number to add a visit. Click a visit card for messages.{' '}
+            <strong>!</strong> = unread (clears when opened).
             {unreadClientNotes > 0 && (
               <>
                 {' '}
@@ -168,7 +157,7 @@ export default function AdminAppointmentsPage() {
           mode="admin"
           usersById={usersById}
           selectedAppointmentId={selectedId}
-          onDayClick={selectDay}
+          onDateClick={openNewDraft}
           onAppointmentClick={openThread}
         />
 
@@ -210,7 +199,7 @@ export default function AdminAppointmentsPage() {
 
           {view.kind === 'idle' && (
             <p className="admin-schedule-detail__hint">
-              Select a day or visit on the calendar.
+              Click a date number to add a visit, or a visit card for messages.
             </p>
           )}
         </div>

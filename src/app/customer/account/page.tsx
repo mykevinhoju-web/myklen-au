@@ -3,7 +3,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { CleaningCalendar } from '@/components/schedule/CleaningCalendar'
 import { VisitNotesPanel } from '@/components/schedule/VisitNotesPanel'
-import { ClientLogout } from '@/components/ClientLogout'
 import { hasUnreadAdminNote } from '@/lib/appointment-notes'
 import { dateKeyFromYMD, pickVisitOnDay } from '@/lib/calendar-utils'
 import type { CleaningAppointment, ClientUserPublic } from '@/lib/types'
@@ -67,19 +66,10 @@ export default function CustomerAccountPage() {
   }
 
   return (
-    <div className="page">
-      <div className="schedule-page__header">
-        <div>
-          <p className="eyebrow">My page</p>
-          <h1 className="display-title text-3xl" style={{ marginBottom: '8px' }}>
-            Hello, {user?.displayName}
-          </h1>
-          <p className="lead" style={{ margin: 0 }}>
-            Tap a day or visit on the calendar — only that visit&apos;s notes appear below.
-          </p>
-        </div>
-        <ClientLogout />
-      </div>
+    <>
+      <p className="lead mb-6" style={{ marginTop: 0 }}>
+        Tap a day or visit on the calendar — only that visit&apos;s notes appear below.
+      </p>
 
       <section className="customer-calendar-section">
         <h2 className="display-title mb-3 text-xl">Your cleaning calendar</h2>
@@ -110,6 +100,6 @@ export default function CustomerAccountPage() {
           No cleaning visits scheduled yet. Your manager will add dates here.
         </p>
       )}
-    </div>
+    </>
   )
 }

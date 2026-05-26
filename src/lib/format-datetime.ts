@@ -1,3 +1,10 @@
+export function formatMessageDate(iso: string) {
+  return new Intl.DateTimeFormat('en-AU', {
+    dateStyle: 'medium',
+    timeZone: 'Australia/Brisbane',
+  }).format(new Date(iso))
+}
+
 export function formatSchedule(iso: string) {
   return new Intl.DateTimeFormat('en-AU', {
     dateStyle: 'medium',

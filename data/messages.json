@@ -2,17 +2,52 @@
   {
     "id": "msg-1779697637067",
     "userId": "user-1779696805382",
-    "subject": "test",
-    "body": "aacea",
+    "title": "test",
+    "content": "aacea",
+    "authorName": "Client",
+    "postedAt": "2026-05-25T08:27:17.067Z",
     "createdAt": "2026-05-25T08:27:17.067Z",
-    "readByAdmin": true
+    "readByAdmin": true,
+    "replies": []
   },
   {
     "id": "msg-1779697659050",
     "userId": "user-1779696805382",
-    "subject": "aacea",
-    "body": "acawef",
+    "title": "aacea",
+    "content": "acawef",
+    "authorName": "Client",
+    "postedAt": "2026-05-25T08:27:39.050Z",
     "createdAt": "2026-05-25T08:27:39.050Z",
-    "readByAdmin": true
+    "readByAdmin": true,
+    "replies": []
+  },
+  {
+    "id": "msg-1779800878679",
+    "userId": "user-1779696805382",
+    "title": "test",
+    "content": "awewaefawefawef",
+    "authorName": "Kerry",
+    "postedAt": "2026-05-26T02:00:00.000Z",
+    "createdAt": "2026-05-26T13:07:58.679Z",
+    "readByAdmin": true,
+    "replies": [
+      {
+        "id": "reply-1779800925676-6jz8vq",
+        "author": "admin",
+        "body": "ok thank u \nhave a nice day",
+        "createdAt": "2026-05-26T13:08:45.676Z"
+      }
+    ]
+  },
+  {
+    "id": "msg-1779801020909",
+    "userId": "user-1779696805382",
+    "title": "one more time",
+    "content": "aefawefaw\nawefaw\nefawefa\nwefaw\nefawef\nawefawefawef",
+    "authorName": "Kerry",
+    "postedAt": "2026-05-26T02:00:00.000Z",
+    "createdAt": "2026-05-26T13:10:20.909Z",
+    "readByAdmin": false,
+    "replies": []
   }
 ]

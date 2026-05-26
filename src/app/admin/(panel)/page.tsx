@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import { AdminClientMessages } from '@/components/admin/AdminClientMessages'
 
 export default function AdminDashboardPage() {
   return (
@@ -8,7 +7,7 @@ export default function AdminDashboardPage() {
       <p className="admin-page-lead">
         Manage client logins and cleaning schedules. Clients sign in at{' '}
         <strong className="font-medium text-slate-200">/customer/login</strong> to view visits and
-        send you notes.
+        post messages.
       </p>
 
       <div className="admin-dash-grid">
@@ -22,9 +21,11 @@ export default function AdminDashboardPage() {
           <span className="admin-dash-card__title">Cleaning schedule →</span>
           <span className="admin-dash-card__desc">Assign visits and see all clients on one calendar</span>
         </Link>
+        <Link href="/admin/messages" className="admin-dash-card">
+          <span className="admin-dash-card__title">Messages →</span>
+          <span className="admin-dash-card__desc">Read client posts and reply from one place</span>
+        </Link>
       </div>
-
-      <AdminClientMessages />
     </div>
   )
 }

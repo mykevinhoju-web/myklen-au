@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { getCurrentClientUser, isAdminAuthenticated } from '@/lib/auth'
+import { createClientMessage, postedAtFromDateInput } from '@/lib/messages-mutate'
 import { loadMessages, saveMessages } from '@/lib/messages-store'
-import type { ClientMessage } from '@/lib/types'
 
 export async function GET() {
   const admin = await isAdminAuthenticated()
@@ -12,7 +12,7 @@ export async function GET() {
   }
 
   const all = await loadMessages()
-  const sorted = [...all].sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+  const sorted = [...all].sort((a, b) => b.postedAt.localeCompare(a.postedAt))
 
   if (admin) {
     return NextResponse.json(sorted)
@@ -27,21 +27,34 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Sign in required' }, { status: 401 })
   }
 
-  const body = (await request.json()) as { subject?: string; body?: string }
-  const text = body.body?.trim()
-
-  if (!text) {
-    return NextResponse.json({ error: 'Message is required' }, { status: 400 })
+  const body = (await request.json()) as {
+    title?: string
+    content?: string
+    postedAt?: string
+    date?: string
   }
 
-  const message: ClientMessage = {
-    id: `msg-${Date.now()}`,
+  const title = body.title?.trim()
+  const content = body.content?.trim()
+
+  if (!title) {
+    return NextResponse.json({ error: 'Title is required' }, { status: 400 })
+  }
+  if (!content) {
+    return NextResponse.json({ error: 'Content is required' }, { status: 400 })
+  }
+
+  const postedAt = body.postedAt
+    ? postedAtFromDateInput(body.postedAt.slice(0, 10))
+    : postedAtFromDateInput(body.date ?? '')
+
+  const message = createClientMessage({
     userId: user.id,
-    subject: body.subject?.trim() || 'Note for myklen',
-    body: text,
-    createdAt: new Date().toISOString(),
-    readByAdmin: false,
-  }
+    authorName: user.displayName,
+    title,
+    content,
+    postedAt,
+  })
 
   const messages = await loadMessages()
   messages.push(message)

@@ -85,13 +85,25 @@ export type CleaningAppointment = {
   createdAt: string
 }
 
+export type MessageReply = {
+  id: string
+  author: 'admin'
+  body: string
+  createdAt: string
+}
+
 export type ClientMessage = {
   id: string
   userId: string
-  subject: string
-  body: string
+  title: string
+  content: string
+  /** Display name at time of posting */
+  authorName: string
+  /** User-facing date for the post */
+  postedAt: string
   createdAt: string
   readByAdmin: boolean
+  replies: MessageReply[]
 }
 
 /** Phase 3 — placeholder type for APIs */

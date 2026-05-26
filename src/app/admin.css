@@ -310,6 +310,9 @@
 }
 
 .admin-panel .schedule-calendar__cell {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
   background: #fff;
 }
 
@@ -317,8 +320,54 @@
   background: #f5f5f4;
 }
 
-.admin-panel .schedule-calendar__cell--outside .schedule-calendar__date {
+.admin-panel .schedule-calendar__cell--outside .schedule-calendar__date,
+.admin-panel .schedule-calendar__cell--outside .schedule-calendar__date--pick {
   color: var(--admin-muted);
+}
+
+.admin-panel .schedule-calendar__date--pick {
+  position: relative;
+  z-index: 2;
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.75rem;
+  height: 1.75rem;
+  margin: 0 0 0.25rem;
+  padding: 0;
+  border: none;
+  border-radius: 0.375rem;
+  background: transparent;
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--admin-ink);
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.admin-panel .schedule-calendar__date--pick:hover {
+  background: rgb(58 79 58 / 0.12);
+  color: #3d4f3a;
+  box-shadow: 0 0 0 1px rgb(58 79 58 / 0.15);
+}
+
+.admin-panel .schedule-calendar__date--pick:focus-visible {
+  outline: 2px solid rgb(58 79 58 / 0.45);
+  outline-offset: 2px;
+}
+
+.admin-panel .schedule-calendar__cell--today .schedule-calendar__date--pick {
+  box-shadow: 0 0 0 1px rgb(58 79 58 / 0.2);
+}
+
+.admin-panel .schedule-calendar__cell--today .schedule-calendar__date--pick:hover {
+  box-shadow: 0 0 0 1px rgb(58 79 58 / 0.28);
 }
 
 .admin-panel .schedule-calendar__event,
