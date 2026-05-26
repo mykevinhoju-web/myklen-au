@@ -1,10 +1,10 @@
 'use client'
 
-import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react'
 import { isReducedMotion } from '@/lib/motion-preference'
 
 /** Bump when replacing hero-scene*.mp4 so browsers skip cached old files */
-const HERO_VIDEO_CACHE_VERSION = 'running-v1'
+const HERO_VIDEO_CACHE_VERSION = 'running-v2'
 
 const VIDEO_DESKTOP = `/hero/hero-scene.mp4?v=${HERO_VIDEO_CACHE_VERSION}`
 const VIDEO_MOBILE = `/hero/hero-scene-mobile.mp4?v=${HERO_VIDEO_CACHE_VERSION}`
@@ -22,10 +22,11 @@ function pickVideoSrc() {
 export function HeroVideoScroll({ children }: Props) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const [reduceMotion, setReduceMotion] = useState(false)
-  const [videoReady, setVideoReady] = useState(false)
+  const [isPlaying, setIsPlaying] = useState(false)
   const [videoFailed, setVideoFailed] = useState(false)
   const [videoSrc, setVideoSrc] = useState(VIDEO_DESKTOP)
-  const showPoster = reduceMotion || videoFailed || !videoReady
+
+  const showStillFallback = reduceMotion || videoFailed || !isPlaying
 
   useEffect(() => {
     const sync = () => setReduceMotion(isReducedMotion())
@@ -40,50 +41,95 @@ export function HeroVideoScroll({ children }: Props) {
   }, [])
 
   useEffect(() => {
-    const apply = () => setVideoSrc(pickVideoSrc())
+    const apply = () => {
+      setIsPlaying(false)
+      setVideoFailed(false)
+      setVideoSrc(pickVideoSrc())
+    }
     apply()
     const mq = window.matchMedia('(max-width: 767px)')
     mq.addEventListener('change', apply)
     return () => mq.removeEventListener('change', apply)
   }, [])
 
+  const tryPlay = useCallback(async () => {
+    const video = videoRef.current
+    if (!video || reduceMotion) return false
+
+    video.muted = true
+    video.defaultMuted = true
+    video.playsInline = true
+
+    try {
+      await video.play()
+      return !video.paused
+    } catch {
+      return false
+    }
+  }, [reduceMotion])
+
   useEffect(() => {
     const video = videoRef.current
     if (!video || reduceMotion) return
 
-    setVideoReady(false)
+    setIsPlaying(false)
     setVideoFailed(false)
 
-    const onReady = () => setVideoReady(true)
+    let cancelled = false
+    let retryTimer: ReturnType<typeof setInterval> | undefined
 
-    const play = () => {
-      void video.play().catch(() => {})
+    const markPlaying = () => {
+      if (!cancelled) setIsPlaying(true)
     }
 
-    video.addEventListener('loadeddata', onReady, { once: true })
-    video.addEventListener('loadeddata', play, { once: true })
-    video.addEventListener('canplay', play, { once: true })
-
-    const prime = () => {
-      if (video.readyState < 1) void video.load()
-      else play()
+    const onPlaying = () => markPlaying()
+    const onError = () => {
+      if (!cancelled) setVideoFailed(true)
     }
 
-    window.addEventListener('touchstart', prime, { once: true, passive: true })
-    if (video.readyState >= 2) {
-      onReady()
-      play()
-    } else {
-      void video.load()
+    const startPlayback = async () => {
+      for (let attempt = 0; attempt < 8 && !cancelled; attempt += 1) {
+        const ok = await tryPlay()
+        if (ok) {
+          markPlaying()
+          return
+        }
+        await new Promise((r) => setTimeout(r, 200))
+      }
     }
+
+    video.addEventListener('playing', onPlaying)
+    video.addEventListener('error', onError)
+    video.addEventListener('canplay', () => void startPlayback())
+    video.addEventListener('loadeddata', () => void startPlayback())
+
+    retryTimer = setInterval(() => {
+      if (!video.paused) {
+        markPlaying()
+        if (retryTimer) clearInterval(retryTimer)
+        return
+      }
+      void startPlayback()
+    }, 1200)
+
+    const onUserGesture = () => {
+      void startPlayback()
+    }
+    window.addEventListener('pointerdown', onUserGesture, { once: true, passive: true })
+    window.addEventListener('scroll', onUserGesture, { once: true, passive: true })
+
+    void video.load()
+    void startPlayback()
 
     return () => {
-      video.removeEventListener('loadeddata', onReady)
-      video.removeEventListener('loadeddata', play)
-      video.removeEventListener('canplay', play)
-      window.removeEventListener('touchstart', prime)
+      cancelled = true
+      if (retryTimer) clearInterval(retryTimer)
+      video.removeEventListener('playing', onPlaying)
+      video.removeEventListener('error', onError)
+      window.removeEventListener('pointerdown', onUserGesture)
+      window.removeEventListener('scroll', onUserGesture)
     }
-  }, [reduceMotion, videoSrc])
+  }, [reduceMotion, videoSrc, tryPlay])
 
   return (
     <section
@@ -92,28 +138,24 @@ export function HeroVideoScroll({ children }: Props) {
     >
       <div className="pointer-events-none absolute inset-0 size-full overflow-hidden" aria-hidden>
         {!reduceMotion && (
-          <div
-            className="absolute inset-0 transition-opacity duration-300"
-            style={{ opacity: videoReady && !videoFailed ? 1 : 0 }}
-          >
-            <video
-              key={videoSrc}
-              ref={videoRef}
-              className="absolute inset-0 size-full object-cover"
-              src={videoSrc}
-              muted
-              playsInline
-              autoPlay
-              loop
-              preload="auto"
-              disablePictureInPicture
-              poster={POSTER_SRC}
-              onError={() => setVideoFailed(true)}
-            />
-          </div>
+          <video
+            key={videoSrc}
+            ref={videoRef}
+            className={`absolute inset-0 size-full object-cover transition-opacity duration-500 ${
+              isPlaying ? 'opacity-100' : 'opacity-0'
+            }`}
+            src={videoSrc}
+            muted
+            playsInline
+            autoPlay
+            loop
+            preload="auto"
+            disablePictureInPicture
+            onError={() => setVideoFailed(true)}
+          />
         )}
 
-        {showPoster && (
+        {showStillFallback && (
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={POSTER_SRC}
