@@ -60,7 +60,7 @@ export function HeroVideoScroll({ children }: Props) {
   return (
     <section
       id="home-hero"
-      className="relative z-0 flex min-h-[100dvh] max-h-[52rem] items-center justify-center overflow-hidden supports-[min-height:100svh]:min-h-[100svh]"
+      className="relative z-0 flex min-h-[100dvh] max-h-[52rem] items-center overflow-hidden supports-[min-height:100svh]:min-h-[100svh]"
     >
       <div className="pointer-events-none absolute inset-0 size-full overflow-hidden" aria-hidden>
         <video
@@ -76,13 +76,10 @@ export function HeroVideoScroll({ children }: Props) {
           disablePictureInPicture
         />
 
-        <div
-          className="absolute inset-0 bg-gradient-to-b from-white/50 via-white/38 to-white/28 opacity-[0.46]"
-          aria-hidden
-        />
+        <div className="hero-video-warm-scrim absolute inset-0" aria-hidden />
       </div>
 
-      <div className="relative z-10 mx-auto flex w-full max-w-5xl flex-col items-center px-4 py-12 text-center max-md:pt-20 sm:px-8 sm:py-16">
+      <div className="hero-content relative z-10 flex flex-col px-5 py-12 max-md:pt-20 sm:px-8 sm:py-16 md:mr-auto md:ml-[clamp(2.5rem,9vw,6.5rem)] lg:ml-[clamp(3rem,11vw,7.5rem)]">
         {children}
       </div>
     </section>

@@ -2,3 +2,5 @@
 export const cardHover = 'hover-lift-card'
 
 export const btnHover = 'hover-lift-btn'
+
+export const btnAccentHover = 'hover-lift-btn hover-lift-btn--accent'

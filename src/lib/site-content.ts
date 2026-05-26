@@ -56,6 +56,40 @@ export const homeOpportunity = {
   closing: 'You bring the commitment — we provide the playbook.',
 } as const
 
+/** Split headline + 2×2 card grid (investment-style layer) */
+export const homeLaunchBoard = {
+  eyebrow: 'Launch planning',
+  title: 'What it takes to start',
+  lead: 'Starting a cleaning business is an investment in tools, training, and local trust — not guesswork.',
+  bullets: [
+    'Choose a package tier that matches your pace — training, branding, and booking tools included.',
+    'Set aside time to learn and practise before you scale — confidence comes before volume.',
+    'Grow locally with your booking link, reviews, and neighbourhood outreach.',
+  ],
+  cards: [
+    {
+      title: 'Package & tools',
+      body: 'Your Starter, Growth, or Premium tier covers training, branding assets, and the systems to take bookings.',
+      tone: 'light' as const,
+    },
+    {
+      title: 'Time to learn',
+      body: 'Plan time for modules and practice cleans before you scale — skill and confidence come first.',
+      tone: 'dark' as const,
+    },
+    {
+      title: 'Local marketing',
+      body: 'Flyers, your booking link, and neighbourhood outreach — growth happens where people know your name.',
+      tone: 'light' as const,
+    },
+    {
+      title: 'Steady cash flow',
+      body: 'Price jobs clearly, collect reviews, and reinvest wisely. Sustainable growth beats burning out early.',
+      tone: 'light' as const,
+    },
+  ],
+} as const
+
 export const homeSteps = [
   { step: '1', title: 'Choose your package', body: 'Pick Starter, Growth, or Premium to match how fast you want to launch.' },
   { step: '2', title: 'Start training', body: 'Work through modules on cleaning, safety, and running your business.' },

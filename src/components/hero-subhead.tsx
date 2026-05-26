@@ -7,7 +7,7 @@ type Props = {
 
 export function HeroSubhead({ blocks, lang }: Props) {
   return (
-    <div className="hero-subhead mx-auto mt-7 w-full max-w-[34rem] sm:mt-8 sm:max-w-[38rem]" lang={lang}>
+    <div className="hero-subhead" lang={lang}>
       {blocks.map((block, blockIndex) => {
         if (typeof block === 'string') {
           return (

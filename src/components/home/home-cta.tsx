@@ -13,7 +13,7 @@ export function HomeCta() {
         <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
           <Link
             href="/packages"
-            className={`rounded-full bg-[var(--hero-accent)] px-8 py-3.5 text-sm font-semibold text-white hover:bg-[#a81832] ${btnHover}`}
+            className={`rounded-full bg-[var(--hero-accent)] px-8 py-3.5 text-sm font-semibold text-white hover:bg-[var(--hero-accent-hover)] ${btnHover}`}
           >
             {homeCta.primary}
           </Link>

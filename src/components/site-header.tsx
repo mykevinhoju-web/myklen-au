@@ -6,7 +6,7 @@ import { useEffect, useId, useRef, useState } from 'react'
 import { BrandLogo } from '@/components/brand-logo'
 import { MascotLogo } from '@/components/mascot-logo'
 import { useScrollMascot } from '@/context/scroll-mascot'
-import { btnHover } from '@/lib/motion-classes'
+import { btnAccentHover } from '@/lib/motion-classes'
 import {
   getLocaleNavCopy,
   getLocalePageDescription,
@@ -69,8 +69,8 @@ function NavLink({
     <Link
       href={href}
       onClick={onNavigate}
-      className={`whitespace-nowrap rounded-lg px-2 py-1.5 text-sm font-medium transition-colors xl:px-2.5 xl:text-[0.9375rem] ${
-        active ? 'text-[#0a0a0a]' : 'text-[#5c5c5c] hover:text-[#0a0a0a]'
+      className={`whitespace-nowrap rounded-lg px-1.5 py-1 text-sm font-medium transition-colors xl:px-2 xl:text-[0.9375rem] ${
+        active ? 'text-[var(--foreground)]' : 'text-[#5c5c5c] hover:text-[var(--foreground)]'
       }`}
       aria-current={active ? 'page' : undefined}
     >
@@ -99,7 +99,7 @@ function LanguagePanel({
               href={item.href}
               onClick={onNavigate}
               className={`flex flex-col items-center gap-2.5 rounded-xl px-3 py-5 transition-colors hover:bg-black/[0.03] ${
-                active ? 'bg-black/[0.06] ring-1 ring-[#0a0a0a]/12' : 'bg-black/[0.04]'
+                active ? 'bg-black/[0.06] ring-1 ring-[var(--foreground)]/12' : 'bg-black/[0.04]'
               }`}
               aria-current={active ? 'page' : undefined}
             >
@@ -111,7 +111,7 @@ function LanguagePanel({
                 {item.flag}
               </span>
               <span className="flex flex-col items-center text-center">
-                <span className="text-sm font-medium text-[#0a0a0a]">{item.label}</span>
+                <span className="text-sm font-medium text-[var(--foreground)]">{item.label}</span>
                 <span className="mt-0.5 text-xs font-medium text-[#5c5c5c]">
                   {getLocalePageDescription(item.id, pathname)}
                 </span>
@@ -166,32 +166,32 @@ function FloatingNavPill({
   return (
     <div
       ref={pillRef}
-      className={`site-header-bar nav-float-pill fixed left-1/2 z-50 w-[calc(100vw-1.25rem)] max-w-[26rem] -translate-x-1/2 overflow-hidden rounded-[1.35rem] border border-black/8 bg-white/94 shadow-lg shadow-black/8 backdrop-blur-xl transition-[box-shadow] duration-300 sm:max-w-[32rem] lg:w-[min(calc(100vw-2rem),56rem)] lg:max-w-none ${
+      className={`site-header-bar nav-float-pill fixed left-1/2 z-50 w-[calc(100vw-1.25rem)] max-w-[26rem] -translate-x-1/2 overflow-hidden rounded-[1.35rem] border border-black/8 bg-white/94 backdrop-blur-xl transition-[box-shadow] duration-300 sm:max-w-[32rem] lg:w-[min(calc(100vw-2rem),56rem)] lg:max-w-none ${
         expanded ? 'nav-float-pill--open' : ''
       }`}
     >
-      <div className="flex h-[3.75rem] items-center gap-2.5 px-3.5 sm:h-16 sm:gap-3 sm:px-4 lg:px-5">
+      <div className="flex h-14 items-center gap-2 px-3 sm:gap-2.5 sm:px-3.5 lg:px-4">
         <Link
           href={homeHref}
-          className="flex min-w-0 shrink-0 items-center gap-2 sm:gap-2.5"
+          className="flex min-w-0 shrink-0 items-center gap-1.5 sm:gap-2"
           aria-label="myklen — home"
           onClick={closeAll}
         >
-          <MascotLogo reveal={mascotReveal} className="!h-9 sm:!h-10" />
+          <MascotLogo reveal={mascotReveal} className="!h-10 sm:!h-11" />
           <BrandLogo
             priority
-            className="!h-5 !max-w-[5.5rem] sm:!h-6 sm:!max-w-[6.5rem]"
+            className="!h-[1.375rem] !max-w-[6rem] sm:!h-[1.625rem] sm:!max-w-[7.25rem]"
           />
         </Link>
 
         <nav
-          className="hidden flex-1 flex-nowrap items-center justify-center gap-0.5 lg:flex xl:gap-1"
+          className="hidden flex-1 flex-nowrap items-center justify-center gap-0 lg:flex xl:gap-0.5"
           aria-label="Main"
         >
           <button
             type="button"
-            className={`flex shrink-0 items-center gap-1 rounded-lg px-2 py-1.5 text-sm font-medium transition-colors xl:px-2.5 xl:text-[0.9375rem] ${
-              localeOpen ? 'text-[#0a0a0a]' : 'text-[#5c5c5c] hover:text-[#0a0a0a]'
+            className={`flex shrink-0 items-center gap-1 rounded-lg px-1.5 py-1 text-sm font-medium transition-colors xl:px-2 xl:text-[0.9375rem] ${
+              localeOpen ? 'text-[var(--foreground)]' : 'text-[#5c5c5c] hover:text-[var(--foreground)]'
             }`}
             aria-expanded={localeOpen}
             aria-haspopup="true"
@@ -214,16 +214,16 @@ function FloatingNavPill({
           ))}
         </nav>
 
-        <div className="hidden shrink-0 items-center gap-2 lg:flex lg:pl-1">
+        <div className="hidden shrink-0 items-center gap-1.5 lg:flex lg:pl-0.5">
           <Link
             href="/customer/login"
-            className="whitespace-nowrap rounded-lg px-2 py-1.5 text-sm font-medium text-[#5c5c5c] hover:text-[#0a0a0a] xl:px-2.5 xl:text-[0.9375rem]"
+            className="whitespace-nowrap rounded-lg px-1.5 py-1 text-sm font-medium text-[#5c5c5c] hover:text-[var(--foreground)] xl:px-2 xl:text-[0.9375rem]"
           >
             Login
           </Link>
           <Link
             href="/packages"
-            className={`whitespace-nowrap rounded-full bg-[#0a0a0a] px-3.5 py-2 text-sm font-medium text-white hover:bg-[#1a1a1a] xl:px-4 xl:text-[0.9375rem] ${btnHover}`}
+            className={`whitespace-nowrap rounded-full bg-[var(--hero-accent)] px-3.5 py-1.5 text-sm font-medium text-white shadow-sm shadow-[#e85a4f]/15 hover:bg-[var(--hero-accent-hover)] xl:px-4 xl:py-2 xl:text-[0.9375rem] ${btnAccentHover}`}
           >
             Get started
           </Link>
@@ -231,7 +231,7 @@ function FloatingNavPill({
 
         <button
           type="button"
-          className="ml-auto inline-flex h-9 w-9 items-center justify-center rounded-lg text-[#0a0a0a] hover:bg-black/5 lg:hidden"
+          className="ml-auto inline-flex h-8 w-8 items-center justify-center rounded-lg text-[var(--foreground)] hover:bg-black/5 lg:hidden"
           aria-expanded={menuOpen}
           aria-controls={menuId}
           onClick={() => {
@@ -280,8 +280,8 @@ function FloatingNavPill({
                         onClick={closeAll}
                         className={`block rounded-lg px-3 py-3 text-[0.9375rem] font-medium ${
                           isNavActive(pathname, item.href)
-                            ? 'bg-black/5 text-[#0a0a0a]'
-                            : 'text-[#0a0a0a]/90 hover:bg-black/5'
+                            ? 'bg-black/5 text-[var(--foreground)]'
+                            : 'text-[var(--foreground)]/90 hover:bg-black/5'
                         }`}
                       >
                         {item.label}
@@ -291,7 +291,7 @@ function FloatingNavPill({
                 </ul>
                 <button
                   type="button"
-                  className="mb-2 flex w-full items-center justify-between rounded-lg px-3 py-3 text-left text-[0.9375rem] font-medium text-[#0a0a0a] hover:bg-black/5"
+                  className="mb-2 flex w-full items-center justify-between rounded-lg px-3 py-3 text-left text-[0.9375rem] font-medium text-[var(--foreground)] hover:bg-black/5"
                   aria-expanded={localeOpen}
                   aria-label={localeNav.ariaLabel}
                   onClick={() => setLocaleOpen((o) => !o)}
@@ -303,7 +303,7 @@ function FloatingNavPill({
                 <div className="mt-2 space-y-1 border-t border-black/8 pt-2">
                   <Link
                     href="/customer/login"
-                    className="block rounded-lg px-3 py-3 text-[0.9375rem] font-medium text-[#0a0a0a]/90 hover:bg-black/5"
+                    className="block rounded-lg px-3 py-3 text-[0.9375rem] font-medium text-[var(--foreground)]/90 hover:bg-black/5"
                     onClick={closeAll}
                   >
                     Login
@@ -311,7 +311,7 @@ function FloatingNavPill({
                   <Link
                     href="/packages"
                     onClick={closeAll}
-                    className={`block rounded-full bg-[#0a0a0a] px-3 py-3 text-center text-[0.9375rem] font-medium text-white hover:bg-[#1a1a1a] ${btnHover}`}
+                    className={`block rounded-full bg-[var(--hero-accent)] px-3 py-3 text-center text-[0.9375rem] font-medium text-white shadow-sm shadow-[#e85a4f]/15 hover:bg-[var(--hero-accent-hover)] ${btnAccentHover}`}
                   >
                     Get started
                   </Link>
@@ -370,7 +370,7 @@ export function SiteHeader() {
 
   return (
     <>
-      <div className="h-[4.5rem] shrink-0 sm:h-[4.85rem] lg:h-[5.75rem]" aria-hidden />
+      <div className="h-[4rem] shrink-0 sm:h-[4.35rem] lg:h-[5.1rem]" aria-hidden />
       <FloatingNavPill
         pathname={pathname}
         mascotReveal={mascotReveal}

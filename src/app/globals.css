@@ -3,7 +3,7 @@
 :root {
   --canvas: #f3f3f1;
   --surface: #ffffff;
-  --foreground: #0a0a0a;
+  --foreground: #1f1f1f;
   --muted: #5c5c5c;
   --border: rgb(0 0 0 / 0.08);
   --myklen-teal: #0d5c5c;
@@ -11,9 +11,14 @@
   --myklen-sky: #3faed3;
   --myklen-sky-soft: #e8f4f6;
   --myklen-sky-mid: #c5e5ee;
-  --hero-accent: #c41e3a;
+  --hero-accent: #e85a4f;
+  --hero-accent-hover: #d14e44;
   --hero-bleed: 0;
   --background: var(--canvas);
+  --launch-sage: #c5d4ce;
+  --launch-olive: #4a5c47;
+  --launch-olive-deep: #3d4f3a;
+  --launch-cream: #f0f1eb;
 }
 
 @theme inline {
@@ -53,7 +58,7 @@ body {
   font-size: 1.0625rem;
   font-weight: 500;
   line-height: 1.65;
-  color: rgb(10 10 10 / 0.78);
+  color: rgb(31 31 31 / 0.78);
 }
 
 @media (min-width: 768px) {
@@ -62,29 +67,32 @@ body {
   }
 }
 
-/* Hero subhead — balanced lines, even spacing between blocks */
+/* Hero copy block — focused width, left-center balance */
+.hero-content {
+  align-items: flex-start;
+  text-align: left;
+  width: 100%;
+  max-width: 32.5rem;
+}
+
 .hero-subhead {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 0.875rem;
-  text-align: center;
-}
-
-@media (min-width: 640px) {
-  .hero-subhead {
-    gap: 1rem;
-  }
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+  text-align: left;
+  width: 100%;
 }
 
 .hero-subhead__line {
   margin: 0;
-  max-width: 36rem;
+  max-width: 100%;
   font-size: 1.0625rem;
   font-weight: 500;
   line-height: 1.58;
   letter-spacing: -0.012em;
-  color: rgb(26 26 26 / 0.9);
+  color: rgb(31 31 31 / 0.88);
   text-wrap: pretty;
 }
 
@@ -98,9 +106,31 @@ body {
 .hero-subhead__group {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   gap: 0.25rem;
   width: 100%;
+}
+
+/* Hero video — warm scrim keeps sunlight visible, improves type contrast */
+.hero-video-warm-scrim {
+  background:
+    linear-gradient(
+      108deg,
+      rgb(255 248 242 / 0.78) 0%,
+      rgb(255 244 238 / 0.52) 38%,
+      rgb(255 250 247 / 0.28) 62%,
+      rgb(255 255 255 / 0.12) 100%
+    ),
+    linear-gradient(to bottom, rgb(255 252 250 / 0.35) 0%, transparent 45%, rgb(255 255 255 / 0.18) 100%);
+}
+
+.hero-cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.75rem;
+  margin-top: 1.75rem;
 }
 
 .hero-subhead[lang='ko'] .hero-subhead__line {
@@ -224,19 +254,22 @@ html[data-hero-bleed='active'] .site-header-bar {
 }
 
 .nav-float-pill {
-  top: 1rem;
+  top: 0.875rem;
+  box-shadow:
+    0 1px 2px rgb(0 0 0 / 0.04),
+    0 8px 24px -10px rgb(0 0 0 / 0.1);
 }
 
 @media (min-width: 1024px) {
   .nav-float-pill {
-    top: 1.5rem;
+    top: 1.25rem;
   }
 }
 
 .nav-float-pill--open {
   box-shadow:
-    0 24px 48px -16px rgb(0 0 0 / 0.14),
-    0 8px 20px -8px rgb(0 0 0 / 0.08);
+    0 20px 40px -18px rgb(0 0 0 / 0.12),
+    0 6px 16px -8px rgb(0 0 0 / 0.06);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -348,14 +381,22 @@ html[data-force-motion='true'] .reveal-on-scroll.reveal-fallback.reveal-visible 
 
 .hover-lift-btn {
   transition:
-    box-shadow 0.2s ease-out,
-    transform 0.2s ease-out,
-    background-color 0.2s ease-out,
-    border-color 0.2s ease-out;
+    box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    background-color 0.35s ease,
+    border-color 0.35s ease;
 }
 
 .hover-lift-btn:hover {
-  box-shadow: 0 8px 20px rgb(0 0 0 / 0.12);
+  box-shadow:
+    0 12px 28px -10px rgb(0 0 0 / 0.14),
+    0 4px 12px -6px rgb(0 0 0 / 0.06);
+}
+
+.hover-lift-btn--accent:hover {
+  box-shadow:
+    0 14px 32px -12px rgb(232 90 79 / 0.38),
+    0 6px 16px -8px rgb(0 0 0 / 0.08);
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -364,11 +405,11 @@ html[data-force-motion='true'] .reveal-on-scroll.reveal-fallback.reveal-visible 
   }
 
   .hover-lift-btn:hover {
-    transform: translateY(-2px);
+    transform: translateY(-1px) scale(1.02);
   }
 
   .hover-lift-btn:active {
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
 }
 
@@ -377,7 +418,7 @@ html[data-force-motion='true'] .hover-lift-card:hover {
 }
 
 html[data-force-motion='true'] .hover-lift-btn:hover {
-  transform: translateY(-2px);
+  transform: translateY(-1px) scale(1.02);
 }
 
 html[data-force-motion='true'] .hover-lift-btn:active {

@@ -32,7 +32,7 @@ export default function PartnerPage() {
         <div className="mt-12 flex flex-wrap gap-3">
           <Link
             href="/packages"
-            className={`rounded-full bg-[var(--hero-accent)] px-8 py-3.5 text-sm font-semibold text-white hover:bg-[#a81832] ${btnHover}`}
+            className={`rounded-full bg-[var(--hero-accent)] px-8 py-3.5 text-sm font-semibold text-white hover:bg-[var(--hero-accent-hover)] ${btnHover}`}
           >
             Apply via packages
           </Link>

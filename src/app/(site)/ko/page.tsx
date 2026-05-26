@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { HomeLaunchBoard } from '@/components/home/home-launch-board'
 import { HomeHeroKo } from '@/components/ko/home-hero-ko'
 import { PackageCardKo } from '@/components/ko/package-card-ko'
 import { HeroImageLayer } from '@/components/hero-image-layer'
@@ -69,6 +70,8 @@ export default async function KoreanHomePage() {
             <p className="mt-8 text-lg font-medium tracking-tight text-[#0a0a0a]">{koSite.opportunity.closing}</p>
           </Reveal>
         </LayerSection>
+
+        <HomeLaunchBoard content={koSite.launchBoard} lang="ko" />
 
         {/* Steps */}
         <div id="how-it-works">

@@ -3,6 +3,7 @@ import { HomeAbout } from '@/components/home-about'
 import { HomeCta } from '@/components/home/home-cta'
 import { HomeHero } from '@/components/home-hero'
 import { HomeOfferings } from '@/components/home/home-offerings'
+import { HomeLaunchBoard } from '@/components/home/home-launch-board'
 import { HomeOpportunity } from '@/components/home/home-opportunity'
 import { HomeSteps } from '@/components/home/home-steps'
 import { HomeTestimonials } from '@/components/home/home-testimonials'
@@ -23,6 +24,7 @@ export default async function HomePage() {
       <div className="site-stack mx-auto w-full max-w-[90rem] px-3 sm:px-4 md:px-5">
         <HomeOfferings />
         <HomeOpportunity />
+        <HomeLaunchBoard />
         <div id="how-it-works">
           <HomeSteps />
         </div>
