@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
 import { DM_Sans } from 'next/font/google'
-import { TawkTo } from '@/components/tawk-to'
 import './globals.css'
 
 const sans = DM_Sans({
@@ -26,10 +25,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en-AU" className={`${sans.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col font-sans">
-        {children}
-        <TawkTo />
-      </body>
+      <body className="min-h-full flex flex-col font-sans">{children}</body>
     </html>
   )
 }
