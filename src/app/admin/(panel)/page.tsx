@@ -25,6 +25,10 @@ export default function AdminDashboardPage() {
           <span className="admin-dash-card__title">Messages →</span>
           <span className="admin-dash-card__desc">Read client posts and reply from one place</span>
         </Link>
+        <Link href="/admin/contact-inquiries" className="admin-dash-card">
+          <span className="admin-dash-card__title">Contact →</span>
+          <span className="admin-dash-card__desc">View contact form submissions from the main website</span>
+        </Link>
       </div>
     </div>
   )

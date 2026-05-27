@@ -106,6 +106,30 @@ export type ClientMessage = {
   replies: MessageReply[]
 }
 
+export type ContactInquiryStatus = 'new' | 'read' | 'replied'
+
+export type ContactInquiryReply = {
+  id: string
+  author: 'admin'
+  body: string
+  createdAt: string
+}
+
+/** Public contact inquiry (no login required). */
+export type ContactInquiry = {
+  id: string
+  name: string
+  email: string
+  phone: string
+  subject: string
+  message: string
+  /** User-selected date for the inquiry */
+  inquiryDate: string
+  createdAt: string
+  status: ContactInquiryStatus
+  replies: ContactInquiryReply[]
+}
+
 /** Phase 3 — placeholder type for APIs */
 export type Booking = {
   id: string

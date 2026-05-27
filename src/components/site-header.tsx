@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect, useId, useRef, useState } from 'react'
@@ -7,50 +8,17 @@ import { BrandLogo } from '@/components/brand-logo'
 import { MascotLogo } from '@/components/mascot-logo'
 import { useScrollMascot } from '@/context/scroll-mascot'
 import { btnAccentHover } from '@/lib/motion-classes'
-import {
-  getLocaleNavCopy,
-  getLocalePageDescription,
-  isLocaleActive,
-  localeHomeHref,
-  localePages,
-} from '@/lib/locale-pages'
+import { isKoreanSite, localeHomeHref } from '@/lib/locale-pages'
 
 const navLinks = [
   { href: '/packages', label: 'Packages' },
   { href: '/partner', label: 'Partner' },
   { href: '/training', label: 'Training' },
-  { href: 'about', label: 'About' },
+  { href: '/contact', label: 'Contact' },
 ] as const
 
-function resolveNavHref(pathname: string, href: string) {
-  if (href === 'about') return `${localeHomeHref(pathname)}#about`
-  return href
-}
-
 function isNavActive(pathname: string, href: string) {
-  if (href === 'about') return pathname === '/' || pathname === '/ko'
   return pathname === href || pathname.startsWith(`${href}/`)
-}
-
-function Chevron({ open }: { open: boolean }) {
-  return (
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 16 16"
-      fill="none"
-      className={`shrink-0 transition-transform duration-300 ${open ? 'rotate-180' : ''}`}
-      aria-hidden
-    >
-      <path
-        d="M4 6L8 10L12 6"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  )
 }
 
 function NavLink({
@@ -79,48 +47,47 @@ function NavLink({
   )
 }
 
-function LanguagePanel({
-  pathname,
-  onNavigate,
-}: {
-  pathname: string
-  onNavigate?: () => void
-}) {
-  const navCopy = getLocaleNavCopy(pathname)
+const localeFlagClass =
+  'inline-flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-full bg-white shadow-sm ring-1 ring-black/10 transition hover:ring-black/20'
+
+/** Korean flag asset includes its own circle, shadow, and padding — avoid extra chrome or cropping. */
+const localeKrFlagLinkClass =
+  'inline-flex h-8 w-8 shrink-0 items-center justify-center transition-opacity hover:opacity-90'
+
+function LocaleSwitchLink({ pathname, onNavigate }: { pathname: string; onNavigate?: () => void }) {
+  if (isKoreanSite(pathname)) {
+    return (
+      <Link
+        href="/"
+        onClick={onNavigate}
+        className={localeFlagClass}
+        aria-label="English site"
+        title="English"
+      >
+        <span className="text-xl leading-none" role="img" aria-hidden>
+          🇦🇺
+        </span>
+      </Link>
+    )
+  }
+
   return (
-    <div className="p-2.5">
-      <p className="px-3 pb-2 text-xs font-medium text-[#5c5c5c]">{navCopy.panelHint}</p>
-      <div className="grid grid-cols-2 gap-2">
-        {localePages.map((item) => {
-          const active = isLocaleActive(pathname, item.href)
-          return (
-            <Link
-              key={item.id}
-              href={item.href}
-              onClick={onNavigate}
-              className={`flex flex-col items-center gap-2.5 rounded-xl px-3 py-5 transition-colors hover:bg-black/[0.03] ${
-                active ? 'bg-black/[0.06] ring-1 ring-[var(--foreground)]/12' : 'bg-black/[0.04]'
-              }`}
-              aria-current={active ? 'page' : undefined}
-            >
-              <span
-                className="locale-flag flex h-11 w-11 items-center justify-center rounded-full bg-white text-[1.75rem] leading-none shadow-sm ring-1 ring-black/10"
-                role="img"
-                aria-label={item.flagLabel}
-              >
-                {item.flag}
-              </span>
-              <span className="flex flex-col items-center text-center">
-                <span className="text-sm font-medium text-[var(--foreground)]">{item.label}</span>
-                <span className="mt-0.5 text-xs font-medium text-[#5c5c5c]">
-                  {getLocalePageDescription(item.id, pathname)}
-                </span>
-              </span>
-            </Link>
-          )
-        })}
-      </div>
-    </div>
+    <Link
+      href="/ko"
+      onClick={onNavigate}
+      className={localeKrFlagLinkClass}
+      aria-label="한국어 사이트"
+      title="한국어"
+    >
+      <Image
+        src="/brand/flag-kr.png"
+        alt=""
+        width={200}
+        height={200}
+        className="h-8 w-8 object-contain"
+        unoptimized
+      />
+    </Link>
   )
 }
 
@@ -129,45 +96,35 @@ function FloatingNavPill({
   mascotReveal,
   menuOpen,
   setMenuOpen,
-  localeOpen,
-  setLocaleOpen,
   menuId,
 }: {
   pathname: string
   mascotReveal: number
   menuOpen: boolean
   setMenuOpen: (v: boolean | ((o: boolean) => boolean)) => void
-  localeOpen: boolean
-  setLocaleOpen: (v: boolean | ((o: boolean) => boolean)) => void
   menuId: string
 }) {
-  const expanded = menuOpen || localeOpen
   const pillRef = useRef<HTMLDivElement>(null)
   const homeHref = localeHomeHref(pathname)
-  const localeNav = getLocaleNavCopy(pathname)
 
   useEffect(() => {
-    if (!expanded) return
+    if (!menuOpen) return
     const onPointerDown = (e: PointerEvent) => {
       if (!pillRef.current?.contains(e.target as Node)) {
-        setLocaleOpen(false)
         setMenuOpen(false)
       }
     }
     document.addEventListener('pointerdown', onPointerDown)
     return () => document.removeEventListener('pointerdown', onPointerDown)
-  }, [expanded, setLocaleOpen, setMenuOpen])
+  }, [menuOpen, setMenuOpen])
 
-  const closeAll = () => {
-    setLocaleOpen(false)
-    setMenuOpen(false)
-  }
+  const closeMenu = () => setMenuOpen(false)
 
   return (
     <div
       ref={pillRef}
       className={`site-header-bar nav-float-pill fixed left-1/2 z-50 w-[calc(100vw-1.25rem)] max-w-[26rem] -translate-x-1/2 overflow-hidden rounded-[1.35rem] border border-black/8 bg-white/94 backdrop-blur-xl transition-[box-shadow] duration-300 sm:max-w-[32rem] lg:w-[min(calc(100vw-2rem),56rem)] lg:max-w-none ${
-        expanded ? 'nav-float-pill--open' : ''
+        menuOpen ? 'nav-float-pill--open' : ''
       }`}
     >
       <div className="flex h-14 items-center gap-2 px-3 sm:gap-2.5 sm:px-3.5 lg:px-4">
@@ -175,7 +132,7 @@ function FloatingNavPill({
           href={homeHref}
           className="flex min-w-0 shrink-0 items-center gap-1.5 sm:gap-2"
           aria-label="myklen — home"
-          onClick={closeAll}
+          onClick={closeMenu}
         >
           <MascotLogo reveal={mascotReveal} className="!h-10 sm:!h-11" />
           <BrandLogo
@@ -188,29 +145,8 @@ function FloatingNavPill({
           className="hidden flex-1 flex-nowrap items-center justify-center gap-0 lg:flex xl:gap-0.5"
           aria-label="Main"
         >
-          <button
-            type="button"
-            className={`flex shrink-0 items-center gap-1 rounded-lg px-1.5 py-1 text-sm font-medium transition-colors xl:px-2 xl:text-[0.9375rem] ${
-              localeOpen ? 'text-[var(--foreground)]' : 'text-[#5c5c5c] hover:text-[var(--foreground)]'
-            }`}
-            aria-expanded={localeOpen}
-            aria-haspopup="true"
-            aria-label={localeNav.ariaLabel}
-            onClick={() => {
-              setMenuOpen(false)
-              setLocaleOpen((o) => !o)
-            }}
-          >
-            {localeNav.menuLabel}
-            <Chevron open={localeOpen} />
-          </button>
           {navLinks.map((item) => (
-            <NavLink
-              key={item.href}
-              href={resolveNavHref(pathname, item.href)}
-              label={item.label}
-              pathname={pathname}
-            />
+            <NavLink key={item.href} href={item.href} label={item.label} pathname={pathname} />
           ))}
         </nav>
 
@@ -227,45 +163,44 @@ function FloatingNavPill({
           >
             Get started
           </Link>
+          <LocaleSwitchLink pathname={pathname} />
         </div>
 
-        <button
-          type="button"
-          className="ml-auto inline-flex h-8 w-8 items-center justify-center rounded-lg text-[var(--foreground)] hover:bg-black/5 lg:hidden"
-          aria-expanded={menuOpen}
-          aria-controls={menuId}
-          onClick={() => {
-            setLocaleOpen(false)
-            setMenuOpen((o) => !o)
-          }}
-        >
-          <span className="sr-only">{menuOpen ? 'Close menu' : 'Open menu'}</span>
-          <svg width="20" height="20" viewBox="0 0 16 16" fill="none" className="text-current" aria-hidden>
-            {menuOpen ? (
-              <path
-                d="M4 4l8 8M12 4L4 12"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-              />
-            ) : (
-              <>
+        <div className="ml-auto flex shrink-0 items-center gap-2 lg:hidden">
+          <LocaleSwitchLink pathname={pathname} onNavigate={closeMenu} />
+          <button
+            type="button"
+            className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-[var(--foreground)] hover:bg-black/5"
+            aria-expanded={menuOpen}
+            aria-controls={menuId}
+            onClick={() => setMenuOpen((o) => !o)}
+          >
+            <span className="sr-only">{menuOpen ? 'Close menu' : 'Open menu'}</span>
+            <svg width="20" height="20" viewBox="0 0 16 16" fill="none" className="text-current" aria-hidden>
+              {menuOpen ? (
+                <path
+                  d="M4 4l8 8M12 4L4 12"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                />
+              ) : (
                 <path d="M2 5h12M2 8h12M2 11h12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-              </>
-            )}
-          </svg>
-        </button>
+              )}
+            </svg>
+          </button>
+        </div>
       </div>
 
       <div
         className={`nav-float-panel grid transition-[grid-template-rows] duration-300 ease-out ${
-          expanded ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
+          menuOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
         }`}
       >
         <div className="min-h-0 overflow-hidden">
           <div
             className={`transition-[opacity,filter,transform] duration-300 ease-out ${
-              expanded
+              menuOpen
                 ? 'opacity-100 blur-0 translate-y-0'
                 : 'pointer-events-none opacity-0 blur-sm -translate-y-1'
             }`}
@@ -276,8 +211,8 @@ function FloatingNavPill({
                   {navLinks.map((item) => (
                     <li key={item.href}>
                       <Link
-                        href={resolveNavHref(pathname, item.href)}
-                        onClick={closeAll}
+                        href={item.href}
+                        onClick={closeMenu}
                         className={`block rounded-lg px-3 py-3 text-[0.9375rem] font-medium ${
                           isNavActive(pathname, item.href)
                             ? 'bg-black/5 text-[var(--foreground)]'
@@ -289,39 +224,23 @@ function FloatingNavPill({
                     </li>
                   ))}
                 </ul>
-                <button
-                  type="button"
-                  className="mb-2 flex w-full items-center justify-between rounded-lg px-3 py-3 text-left text-[0.9375rem] font-medium text-[var(--foreground)] hover:bg-black/5"
-                  aria-expanded={localeOpen}
-                  aria-label={localeNav.ariaLabel}
-                  onClick={() => setLocaleOpen((o) => !o)}
-                >
-                  {localeNav.menuLabel}
-                  <Chevron open={localeOpen} />
-                </button>
-                {localeOpen && <LanguagePanel pathname={pathname} onNavigate={closeAll} />}
-                <div className="mt-2 space-y-1 border-t border-black/8 pt-2">
+                <div className="space-y-1 border-t border-black/8 pt-2">
                   <Link
                     href="/customer/login"
                     className="block rounded-lg px-3 py-3 text-[0.9375rem] font-medium text-[var(--foreground)]/90 hover:bg-black/5"
-                    onClick={closeAll}
+                    onClick={closeMenu}
                   >
                     Login
                   </Link>
                   <Link
                     href="/packages"
-                    onClick={closeAll}
+                    onClick={closeMenu}
                     className={`block rounded-full bg-[var(--hero-accent)] px-3 py-3 text-center text-[0.9375rem] font-medium text-white shadow-sm shadow-[#e85a4f]/15 hover:bg-[var(--hero-accent-hover)] ${btnAccentHover}`}
                   >
                     Get started
                   </Link>
                 </div>
               </nav>
-            )}
-            {localeOpen && !menuOpen && (
-              <div className="hidden border-t border-black/8 lg:block">
-                <LanguagePanel pathname={pathname} onNavigate={closeAll} />
-              </div>
             )}
           </div>
         </div>
@@ -336,20 +255,15 @@ export function SiteHeader() {
   const pathname = usePathname()
   const menuId = useId()
   const [menuOpen, setMenuOpen] = useState(false)
-  const [localeOpen, setLocaleOpen] = useState(false)
 
   useEffect(() => {
     setMenuOpen(false)
-    setLocaleOpen(false)
   }, [pathname])
 
   useEffect(() => {
     if (!menuOpen) return
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        setMenuOpen(false)
-        setLocaleOpen(false)
-      }
+      if (e.key === 'Escape') setMenuOpen(false)
     }
     document.body.style.overflow = 'hidden'
     window.addEventListener('keydown', onKey)
@@ -359,15 +273,6 @@ export function SiteHeader() {
     }
   }, [menuOpen])
 
-  useEffect(() => {
-    if (!localeOpen) return
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setLocaleOpen(false)
-    }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
-  }, [localeOpen])
-
   return (
     <>
       <div className="h-[4rem] shrink-0 sm:h-[4.35rem] lg:h-[5.1rem]" aria-hidden />
@@ -376,8 +281,6 @@ export function SiteHeader() {
         mascotReveal={mascotReveal}
         menuOpen={menuOpen}
         setMenuOpen={setMenuOpen}
-        localeOpen={localeOpen}
-        setLocaleOpen={setLocaleOpen}
         menuId={menuId}
       />
     </>
